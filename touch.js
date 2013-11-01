@@ -2,11 +2,10 @@ window.onload = function(e){
   element = document.getElementById('el');
   hammertime = Hammer(el)
   transform = hammertime.on('transform', function(event){
-    alert('Hello!');
+    console.log(event);
   }); 
   drag = hammertime.on('drag', function(event){
     console.log(event);
-    alert('Hellish!');
   }); 
 };
 

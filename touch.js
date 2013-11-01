@@ -1,4 +1,4 @@
-document.onload = function(e){
+window.onload = function(e){
   element = document.getElementById('el');
   hammertime = Hammer(el)
   transform = hammertime.on('transform', function(event){

@@ -5,6 +5,7 @@ document.onload = function(e){
     alert('Hello!');
   }); 
   var drag = hammertime.on('drag', function(event){
+    console.log(event);
     alert('Hellish!');
   }); 
 };

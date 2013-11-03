@@ -1,6 +1,6 @@
 window.onload = function(e){
 	element = document.getElementById('el');
-	hammertime = Hammer(document.body, {prevent_mouseevents: true, transform_always_block: true})
+	hammertime = Hammer(document.body, {prevent_mouseevents: true, transform_always_block: true, drag_block_horizontal: true, drag_block_vertical:true})
 	transform = hammertime.on('transform', function(event){
 		console.log(event);
 	}); 

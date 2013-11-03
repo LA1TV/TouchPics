@@ -6,9 +6,8 @@ window.onload = function(e){
 	}); 
 	drag = hammertime.on('drag', function(event){
 		console.log(event);
-		event.target.parentNode.posTop += event.gesture.deltaY
-		console.log(event.target.parentNode.posTop);
-		event.target.parentNode.style.top =event.target.parentNode.posTop;
+		event.target.parentNode.style.top = event.gesture.startEvent.center.pageY + event.gesture.deltaY;
+		event.target.parentNode.style.left = event.gesture.startEvent.center.pageX + event.gesture.deltaX;
 	}); 
 };
 

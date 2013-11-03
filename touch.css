@@ -1,7 +1,22 @@
 div.touchable{
-  position: relative;
+	position: relative;
+	display: inline-block;
+	height: 150px;
+	width: 800px;
+	padding: 0;
+	margin: 0;
+}
+
+img.touchable{
+	padding: 0;
+	margin: 0;
 }
 
 div.button{
-  position: relative;
+	float: right;
+	position: relative;
+	top: -10px;
+	right: 20px;
+	margin: 0;
+	padding: 0;
 }

@@ -1,0 +1,26 @@
+body{
+	margin: 0;
+}
+
+div.touchable{
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+}
+
+img.touchable{
+	padding: 0;
+	margin: 0;
+	float: left;
+}
+
+div.button{
+	float: left;
+	position: relative;
+	top: 0px;
+	right: 0px;
+	margin: 0;
+	padding: 0;
+	margin-right: -50px;
+}

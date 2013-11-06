@@ -4,18 +4,15 @@ window.onload = function(e){
 	transform = hammertime.on('transform', function(event){
 		console.log(event);
 	}); 
-	tstart = document.body.addEventListener('touchstart', function(event){
+	drag_start = hammertime.on('dragstart', function(event){
 		console.log(event);
-		event.target.parentNode.offsetX = event.target.x - event.targetTouches[0].pageX;
-		event.target.parentNode.offsetY = event.target.y - event.targetTouches[0].pageY;
+		event.target.parentNode.offsetX = event.target.x - event.gesture.center.pageX;
+		event.target.parentNode.offsetY = event.target.y - event.gesture.center.pageY;
 	});
 	drag = hammertime.on('drag', function(event){
 		console.log(event);
 		event.target.parentNode.style.left = event.gesture.startEvent.center.pageX + event.gesture.deltaX + event.target.parentNode.offsetX;
 		event.target.parentNode.style.top = event.gesture.startEvent.center.pageY + event.gesture.deltaY + event.target.parentNode.offsetY;
 	}); 
-	transform = hammertime.on('transform', function(event){
-		console.log(event);
-	});
 };
 

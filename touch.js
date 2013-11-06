@@ -14,5 +14,8 @@ window.onload = function(e){
 		event.target.parentNode.style.left = event.gesture.startEvent.center.pageX + event.gesture.deltaX + event.target.parentNode.offsetX;
 		event.target.parentNode.style.top = event.gesture.startEvent.center.pageY + event.gesture.deltaY + event.target.parentNode.offsetY;
 	}); 
+	close = hammertime.on('tap', function(event){
+		alert("This doesn't do much yet");
+	});
 };
 

@@ -5,12 +5,13 @@ images = function(e){
     Hammer.plugins.fakeMultitouch();
     
     touchable = document.getElementById('test_item');
-    img = new TouchImage(touchable, touchable.firstElementChild, "", 0, 0, 1);
+    img = new TouchImage(touchable, touchable.firstElementChild, document.getElementById("test_button"), "", 0, 0, 1);
 };
 
-TouchImage = function(el, img, src, x, y, scale){
+TouchImage = function(el, img, button, src, x, y, scale){
     this.el = el;
     this.img = img;
+    this.button = button;
     this.src = src;
     this.transform = {a:1, b:0, c:0, d:1, e:0, f:0};
     this.transform_matrix = "matrix("+this.transform.a+","+this.transform.b+","+this.transform.c+","+this.transform.d+","+this.transform.e+","+this.transform.f+")";
@@ -25,9 +26,11 @@ TouchImage = function(el, img, src, x, y, scale){
         startAng: 0
     };  
     this.hammertime = Hammer(this.img, hammer_config);
+    this.button_hammertime = Hammer(this.button, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
+    this.hammer.buttonTap = this.button_hammertime.on('tap', this.tapButton());
 };
 
 TouchImage.prototype.updateTransform = function(){
@@ -53,6 +56,12 @@ TouchImage.prototype.drag = function(){
         that.pos.x = that.pos.startX + event.gesture.deltaX;
         that.pos.y = that.pos.startY + event.gesture.deltaY;
         that.updateTransform();
+    };
+};
+
+TouchImage.prototype.tapButton = function(){
+    return function(event){
+        alert('This is about as redundant as a chocolate teapot'); 
     };
 };
 

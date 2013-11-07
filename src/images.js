@@ -5,7 +5,7 @@ images = function(e){
     Hammer.plugins.fakeMultitouch();
     
     touchable = document.getElementById('test_item');
-    img = new TouchImage(touchable, touchable.firstElementChild, document.getElementById("test_button"), "", 0, 0, 1);
+    img = new TouchImage(touchable, touchable.firstElementChild,        document.getElementById("test_button"), "", 0, 0, 1);
 };
 
 TouchImage = function(el, img, button, src, x, y, scale){
@@ -31,9 +31,13 @@ TouchImage = function(el, img, button, src, x, y, scale){
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
     this.hammer.buttonTap = this.button_hammertime.on('tap', this.tapButton());
+    this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
+    this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
 };
 
 TouchImage.prototype.updateTransform = function(){
+    this.transform.a = this.pos.scale;
+    this.transform.d = this.pos.scale;
     this.transform.e = this.pos.x;
     this.transform.f = this.pos.y;
     this.transform_matrix = "matrix("+this.transform.a+","+this.transform.b+","+this.transform.c+","+this.transform.d+","+this.transform.e+","+this.transform.f+")";
@@ -62,6 +66,28 @@ TouchImage.prototype.drag = function(){
 TouchImage.prototype.tapButton = function(){
     return function(event){
         alert('This is about as redundant as a chocolate teapot'); 
+    };
+};
+
+TouchImage.prototype.transformStart = function(){
+    var that = this;
+    return function(event){
+        console.log(event);
+        that.pos.startX = that.pos.x;
+        that.pos.startY = that.pos.y;
+        that.pos.startScale = that.pos.scale;
+        that.pos.startAng = that.pos.ang;
+    };
+};
+
+TouchImage.prototype.transformCallback = function(){
+    var that = this;
+    return function(event){
+        console.log(event);
+        that.pos.x = that.pos.startX + event.gesture.deltaX;
+        that.pos.y = that.pos.startY + event.gesture.deltaY;
+        that.pos.scale = that.pos.startScale * event.gesture.scale;
+        that.updateTransform();        
     };
 };
 

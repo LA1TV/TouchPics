@@ -82,7 +82,9 @@ TouchImage.prototype.transformStart = function(){
         that.pos.startScale = that.pos.scale;
         that.pos.startAng = that.pos.ang;
         var dx = that.pos.x - event.gesture.center.pageX;
-        var dy = that.pos.y - event.gesture.center.pageY;
+        var dy = event.gesture.center.pageY - that.pos.y;
+        console.log(dx, dy);
+        console.log(event.gesture.center);
         that.pos.startRadius = Math.hypot(dy, dx);
         that.pos.startRadiusAng = Math.atan2(dy, dx);
         console.log(that.pos);
@@ -93,7 +95,8 @@ TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
         console.log(event);
-        that.pos.x = that.pos.startX + event.gesture.scale * that.pos.startRadius * Math.cos(that.pos.startRadiusAng);
+        that.pos.x = event.gesture.center.pageX + event.gesture.scale * that.pos.startRadius * Math.cos(that.pos.startRadiusAng);
+        that.pos.y = event.gesture.center.pageY - event.gesture.scale * that.pos.startRadius * Math.sin(that.pos.startRadiusAng);
         that.pos.scale = that.pos.startScale * event.gesture.scale;
         that.updateTransform();        
     };

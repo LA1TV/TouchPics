@@ -12,6 +12,7 @@ img.touchable{
 div.touchable{
     padding: 0;
     margin: 0;
+    display: inline-block;
 }
 
 img.button{
@@ -23,7 +24,7 @@ img.button{
 
 div.button{
     float: left;
-    margin-right: -50px;
     padding: 0;
     margin: 0;
+    margin-right: -50px;
 }

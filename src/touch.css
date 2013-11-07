@@ -1,15 +1,13 @@
 body{
     margin: 0;
-    overflow: hidden;
 }
 
 img.touchable{
-    display: inline-block;
     float: left;
 }
 
 div.touchable{
-    display: inline-block;
+    
 }
 
 img.button{

@@ -1,3 +1,7 @@
+Math.hypot = function(x, y){
+    return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
+};
+
 images = function(e){
     hammer_config = {prevent_mouseevents: false, transform_always_block: true, drag_block_horizontal: true, drag_block_vertical:true};
     
@@ -42,7 +46,7 @@ TouchImage.prototype.updateTransform = function(){
     this.transform.f = this.pos.y;
     this.transform_matrix = "matrix("+this.transform.a+","+this.transform.b+","+this.transform.c+","+this.transform.d+","+this.transform.e+","+this.transform.f+")";
     this.el.style.webkitTransform = this.transform_matrix;
-    console.log(this.matrix_transform);
+    console.log(this.transform_matrix);
 };
 
 TouchImage.prototype.dragStart = function(){
@@ -77,6 +81,11 @@ TouchImage.prototype.transformStart = function(){
         that.pos.startY = that.pos.y;
         that.pos.startScale = that.pos.scale;
         that.pos.startAng = that.pos.ang;
+        var dx = that.pos.x - event.gesture.center.pageX;
+        var dy = that.pos.y - event.gesture.center.pageY;
+        that.pos.startRadius = Math.hypot(dy, dx);
+        that.pos.startRadiusAng = Math.atan2(dy, dx);
+        console.log(that.pos);
     };
 };
 
@@ -84,8 +93,7 @@ TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
         console.log(event);
-        that.pos.x = that.pos.startX + event.gesture.deltaX;
-        that.pos.y = that.pos.startY + event.gesture.deltaY;
+        that.pos.x = that.pos.startX + event.gesture.scale * that.pos.startRadius * Math.cos(that.pos.startRadiusAng);
         that.pos.scale = that.pos.startScale * event.gesture.scale;
         that.updateTransform();        
     };

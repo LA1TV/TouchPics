@@ -3,19 +3,16 @@ Math.hypot = function(x, y){
 };
 
 images = function(e){
-    hammer_config = {prevent_mouseevents: false, 
-                     transform_always_block: true, 
-                     drag_block_horizontal: true, 
-                     drag_block_vertical:true
-                    };
-    
     Hammer.plugins.showTouches();
     Hammer.plugins.fakeMultitouch();
+    
+    //TODO Create the divs in JS
+	//TODO Ability to close divs
+	//TODO Image menu
     
     touchable = document.getElementById('test_item');
     img = new TouchImage(touchable, 
                          touchable.firstElementChild, 
-                         document.getElementById("test_button"), 
                          "", 
                          0, 
                          0, 
@@ -23,10 +20,15 @@ images = function(e){
                         );
 };
 
-TouchImage = function(el, img, button, src, x, y, scale){
+TouchImage = function(el, img, src, x, y, scale){
     this.el = el;
     this.img = img;
-    this.button = button;
+    this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
+    this.el.appendChild(this.close_button.div);
+    this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
+                                          ['top', 0, 7, 'top 0.5s cubic-bezier(0.175, 0.885, 0.7, 1.775)'], 120, -20, this.toggleLock())
+    //cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    this.el.appendChild(this.lock_button.div);
     this.src = src;
     this.transform = {a:1, 
                       b:0, 
@@ -51,14 +53,13 @@ TouchImage = function(el, img, button, src, x, y, scale){
         startScale: scale,
         scaleLimit: Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight),
         ang: 0,
-        startAng: 0
+        startAng: 0,
+        lock: false
     };  
     this.hammertime = Hammer(this.img, hammer_config);
-    this.button_hammertime = Hammer(this.button, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
-    this.hammer.buttonTap = this.button_hammertime.on('tap', this.tapButton());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
 };
@@ -84,6 +85,9 @@ TouchImage.prototype.updateTransform = function(){
 TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
     };
@@ -92,6 +96,9 @@ TouchImage.prototype.dragStart = function(){
 TouchImage.prototype.drag = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.x = that.pos.startX + event.gesture.deltaX;
         that.pos.y = that.pos.startY + event.gesture.deltaY;
         that.updateTransform();
@@ -99,6 +106,7 @@ TouchImage.prototype.drag = function(){
 };
 
 TouchImage.prototype.tapButton = function(){
+    //TODO Closing divs
     return function(event){
         alert('This is about as redundant as a chocolate teapot'); 
     };
@@ -107,6 +115,9 @@ TouchImage.prototype.tapButton = function(){
 TouchImage.prototype.transformStart = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.startScale = that.pos.scale;
@@ -122,12 +133,22 @@ TouchImage.prototype.transformStart = function(){
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
         that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.scale = that.pos.startScale * Math.max(that.pos.scaleLimit, event.gesture.scale);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
     };
+};
+
+TouchImage.prototype.toggleLock = function(){
+    var that = this;
+    return function(event){
+        that.pos.lock = !that.pos.lock;
+    }
 };
 
 window.onload = images;

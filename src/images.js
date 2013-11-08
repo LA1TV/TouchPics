@@ -42,6 +42,10 @@ TouchImage = function(el, img, button, src, x, y, scale){
 
 TouchImage.prototype.updateTransform = function(){
     this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
+    this.transform.a = Math.cos(this.pos.ang);
+    this.transform.b = Math.sin(this.pos.ang);
+    this.transform.c = -1 * Math.sin(this.pos.ang);
+    this.transform.d = Math.cos(this.pos.ang);
     this.transform.e = this.pos.x;
     this.transform.f = this.pos.y;
     this.transform_matrix = "matrix("+this.transform.a+","+this.transform.b+","+this.transform.c+","+this.transform.d+","+this.transform.e+","+this.transform.f+")";

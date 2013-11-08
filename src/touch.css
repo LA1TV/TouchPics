@@ -24,6 +24,9 @@ img.button{
 }
 
 div.button{
+    position: relative;
+    right: 0;
+    top: 0;
     float: left;
     padding: 0;
     margin: 0;

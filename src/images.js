@@ -26,6 +26,7 @@ TouchImage = function(el, img, button, src, x, y, scale){
         startY: y,
         scale: scale,
         startScale: scale,
+        scaleLimit: Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight),
         ang: 0,
         startAng: 0
     };  
@@ -40,8 +41,7 @@ TouchImage = function(el, img, button, src, x, y, scale){
 };
 
 TouchImage.prototype.updateTransform = function(){
-    this.transform.a = this.pos.scale;
-    this.transform.d = this.pos.scale;
+    this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
     this.transform.e = this.pos.x;
     this.transform.f = this.pos.y;
     this.transform_matrix = "matrix("+this.transform.a+","+this.transform.b+","+this.transform.c+","+this.transform.d+","+this.transform.e+","+this.transform.f+")";
@@ -95,9 +95,9 @@ TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
         console.log(event);
-        that.pos.x = event.gesture.center.pageX + event.gesture.scale * that.pos.startRadius * Math.cos(that.pos.startRadiusAng);
-        that.pos.y = event.gesture.center.pageY - event.gesture.scale * that.pos.startRadius * Math.sin(that.pos.startRadiusAng);
-        that.pos.scale = that.pos.startScale * event.gesture.scale;
+        that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng);
+        that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng);
+        that.pos.scale = that.pos.startScale * Math.max(that.pos.scaleLimit, event.gesture.scale);
         that.updateTransform();        
     };
 };

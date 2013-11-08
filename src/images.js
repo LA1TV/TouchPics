@@ -19,7 +19,6 @@ images = function(e){
     touchable = document.getElementById('test_item');
     img = new TouchImage(touchable, 
                          touchable.firstElementChild, 
-                         document.getElementById("test_button"), 
                          "", 
                          0, 
                          0, 
@@ -27,10 +26,11 @@ images = function(e){
                         );
 };
 
-TouchImage = function(el, img, button, src, x, y, scale){
+TouchImage = function(el, img, src, x, y, scale){
     this.el = el;
     this.img = img;
-    this.button = button;
+    this.button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
+    this.el.appendChild(this.button.div);
     this.src = src;
     this.transform = {a:1, 
                       b:0, 
@@ -59,11 +59,9 @@ TouchImage = function(el, img, button, src, x, y, scale){
         lock: false
     };  
     this.hammertime = Hammer(this.img, hammer_config);
-    this.button_hammertime = Hammer(this.button, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
-    this.hammer.buttonTap = this.button_hammertime.on('tap', this.tapButton());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
 };

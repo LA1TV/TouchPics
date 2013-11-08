@@ -16,12 +16,12 @@ TouchButton = function(src, right, top, func){
     this.div.appendChild(this.img);
     
     this.hammer = Hammer(this.div, hammer_config);
-    this.hammer.on('tap', this.callFunc);
+    this.hammer.on('tap', this.callFunc());
 };
 
 TouchButton.prototype.callFunc = function(){
     var that = this;
     return function(event){
-        that.func(event);   
+        that.func(event);
     };
 };

@@ -113,12 +113,8 @@ TouchImage.prototype.transformStart = function(){
         that.pos.startAng = that.pos.ang;
         var dx = that.pos.x - event.gesture.center.pageX;
         var dy = event.gesture.center.pageY - that.pos.y;
-        console.log(dx, dy);
         that.pos.startRadius = Math.hypot(dy, dx);
         that.pos.startRadiusAng = Math.atan2(dy, dx) + that.pos.ang;
-        console.log(that.pos.ang);
-        console.log(that.pos.startRadiusAng);
-        console.log('end');
         that.updateTransform();
     };
 };

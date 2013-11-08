@@ -51,7 +51,8 @@ TouchImage = function(el, img, button, src, x, y, scale){
         startScale: scale,
         scaleLimit: Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight),
         ang: 0,
-        startAng: 0
+        startAng: 0,
+        lock: false
     };  
     this.hammertime = Hammer(this.img, hammer_config);
     this.button_hammertime = Hammer(this.button, hammer_config);
@@ -84,6 +85,9 @@ TouchImage.prototype.updateTransform = function(){
 TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
     };
@@ -92,6 +96,9 @@ TouchImage.prototype.dragStart = function(){
 TouchImage.prototype.drag = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.x = that.pos.startX + event.gesture.deltaX;
         that.pos.y = that.pos.startY + event.gesture.deltaY;
         that.updateTransform();
@@ -107,6 +114,9 @@ TouchImage.prototype.tapButton = function(){
 TouchImage.prototype.transformStart = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.startScale = that.pos.scale;
@@ -122,12 +132,22 @@ TouchImage.prototype.transformStart = function(){
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
+        if(that.pos.lock){
+            return false;
+        }
         that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
         that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.scale = that.pos.startScale * Math.max(that.pos.scaleLimit, event.gesture.scale);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
     };
+};
+
+TouchImage.prototype.toggleLock = function(){
+    var that = this;
+    return function(event){
+        that.pos.lock = !that.pos.lock;
+    }
 };
 
 window.onload = images;

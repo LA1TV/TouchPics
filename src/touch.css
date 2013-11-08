@@ -32,3 +32,7 @@ div.button{
     margin: 0;
     margin-right: -50px;
 }
+
+img.button img.over{
+    background-color: rgb(255,0,0);   
+}

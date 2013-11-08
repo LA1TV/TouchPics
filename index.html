@@ -5,14 +5,19 @@
     <script src='libs/hammer.js'></script>
     <script src='libs/hammer.fakemultitouch.js'></script>
     <script src='libs/hammer.showtouches.js'></script>
+    <script type='text/javascript'>
+        hammer_config = {prevent_mouseevents: false, 
+                 transform_always_block: true, 
+                 drag_block_horizontal: true, 
+                 drag_block_vertical:true
+                };
+    </script>
     <script src='src/images.js'></script>
+    <script src='src/buttons.js'></script>
 </head>
 <body ondragstart="return false">
     <div class='touchable' id='test_item'>
         <img class='touchable' src='http://la1tv.lusu.co.uk/files/2012/01/logo_dark_web_banner.jpg' />
-        <div class='button' id='test_button'>
-            <img class='button' src='assets/close.svg' />
-        </div>
     </div>
 </body>
 </html>

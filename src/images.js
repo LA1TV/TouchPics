@@ -12,6 +12,10 @@ images = function(e){
     Hammer.plugins.showTouches();
     Hammer.plugins.fakeMultitouch();
     
+    //TODO Create the divs in JS
+	//TODO Ability to close divs
+	//TODO Image menu
+    
     touchable = document.getElementById('test_item');
     img = new TouchImage(touchable, 
                          touchable.firstElementChild, 
@@ -106,6 +110,7 @@ TouchImage.prototype.drag = function(){
 };
 
 TouchImage.prototype.tapButton = function(){
+    //TODO Closing divs
     return function(event){
         alert('This is about as redundant as a chocolate teapot'); 
     };

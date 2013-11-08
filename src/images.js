@@ -3,13 +3,24 @@ Math.hypot = function(x, y){
 };
 
 images = function(e){
-    hammer_config = {prevent_mouseevents: false, transform_always_block: true, drag_block_horizontal: true, drag_block_vertical:true};
+    hammer_config = {prevent_mouseevents: false, 
+                     transform_always_block: true, 
+                     drag_block_horizontal: true, 
+                     drag_block_vertical:true
+                    };
     
     Hammer.plugins.showTouches();
     Hammer.plugins.fakeMultitouch();
     
     touchable = document.getElementById('test_item');
-    img = new TouchImage(touchable, touchable.firstElementChild,        document.getElementById("test_button"), "", 0, 0, 1);
+    img = new TouchImage(touchable, 
+                         touchable.firstElementChild, 
+                         document.getElementById("test_button"), 
+                         "", 
+                         0, 
+                         0, 
+                         1
+                        );
 };
 
 TouchImage = function(el, img, button, src, x, y, scale){
@@ -17,8 +28,20 @@ TouchImage = function(el, img, button, src, x, y, scale){
     this.img = img;
     this.button = button;
     this.src = src;
-    this.transform = {a:1, b:0, c:0, d:1, e:0, f:0};
-    this.transform_matrix = "matrix("+this.transform.a+","+this.transform.b+","+this.transform.c+","+this.transform.d+","+this.transform.e+","+this.transform.f+")";
+    this.transform = {a:1, 
+                      b:0, 
+                      c:0, 
+                      d:1, 
+                      e:0, 
+                      f:0
+                     };
+    this.transform_matrix = "matrix("+
+        this.transform.a+","+
+        this.transform.b+","+
+        this.transform.c+","+
+        this.transform.d+","+
+        this.transform.e+","+
+        this.transform.f+")";
     this.pos = {
         x: x,
         startX: x,
@@ -48,7 +71,13 @@ TouchImage.prototype.updateTransform = function(){
     this.transform.d = Math.cos(this.pos.ang);
     this.transform.e = this.pos.x;
     this.transform.f = this.pos.y;
-    this.transform_matrix = "matrix("+this.transform.a+","+this.transform.b+","+this.transform.c+","+this.transform.d+","+this.transform.e+","+this.transform.f+")";
+    this.transform_matrix = "matrix("+
+        this.transform.a+","+
+        this.transform.b+","+
+        this.transform.c+","+
+        this.transform.d+","+
+        this.transform.e+","+
+        this.transform.f+")";
     this.el.style.webkitTransform = this.transform_matrix;
     console.log(this.transform_matrix);
 };
@@ -102,6 +131,7 @@ TouchImage.prototype.transformCallback = function(){
         that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng);
         that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng);
         that.pos.scale = that.pos.startScale * Math.max(that.pos.scaleLimit, event.gesture.scale);
+        that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
     };
 };

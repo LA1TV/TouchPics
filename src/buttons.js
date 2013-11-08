@@ -25,3 +25,11 @@ TouchButton.prototype.callFunc = function(){
         that.func(event);
     };
 };
+
+AnimTouchButton = function(src1, src2, right, top, func){
+    //TODO Allow animation to be defined
+    
+}
+
+AnimTouchButton.prototype = new TouchButton();
+AnimTouchButton.prototype.constructor = AnimTouchButton;

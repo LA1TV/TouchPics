@@ -3,12 +3,6 @@ Math.hypot = function(x, y){
 };
 
 images = function(e){
-    hammer_config = {prevent_mouseevents: false, 
-                     transform_always_block: true, 
-                     drag_block_horizontal: true, 
-                     drag_block_vertical:true
-                    };
-    
     Hammer.plugins.showTouches();
     Hammer.plugins.fakeMultitouch();
     

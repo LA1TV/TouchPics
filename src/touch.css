@@ -13,7 +13,7 @@ div.touchable{
     padding: 0;
     margin: 0;
     display: inline-block;
-    -webkit-transform-origin:top left;
+    -webkit-transform-origin: top left;
 }
 
 img.button{
@@ -33,6 +33,7 @@ div.button{
     margin-right: -50px;
 }
 
-img.button img.over{
-    background-color: rgb(255,0,0);   
+img.button.over{
+    margin-left: -50px;
+    position: relative;
 }

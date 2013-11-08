@@ -26,10 +26,20 @@ TouchButton.prototype.callFunc = function(){
     };
 };
 
-AnimTouchButton = function(src1, src2, right, top, func){
-    //TODO Allow animation to be defined
+AnimTouchButton = function(src1, src2, anim, right, top, func){
+    /*
+    anim is an array with:
+    0: Style property to be animated
+    e.g 'top' would be this.div.style.top or top for img2
+    1: Initial value
+    2: Animated value
+    3: The CSS for -webkit-transition
+    e.g Following the example top 2s
+    */
+    
     this.src1 = src1;
     this.src2 = src2;
+    this.anim = anim;
     this.right = right;
     this.top = top;
     this.func = func;
@@ -52,7 +62,18 @@ AnimTouchButton = function(src1, src2, right, top, func){
     
     this.hammer = Hammer(this.div, hammer_config);
     this.hammer.on('tap', this.callFunc());
+    
+    this.img2.style[this.anim[0]] = this.anim[1];
+    this.img2.style.webkitTransition = this.anim[3];
+    //TODO more than simple toggling
+    this.state = false;
 }
 
-AnimTouchButton.prototype = new TouchButton();
-AnimTouchButton.prototype.constructor = AnimTouchButton;
+AnimTouchButton.prototype.callFunc = function(){
+    var that = this;
+    return function(event){
+        that.func(event);
+        that.state = !that.state;
+        that.img2.style[that.anim[0]] = that.anim[1+that.state];
+    };
+};

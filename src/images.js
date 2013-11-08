@@ -79,7 +79,6 @@ TouchImage.prototype.updateTransform = function(){
         this.transform.e+","+
         this.transform.f+")";
     this.el.style.webkitTransform = this.transform_matrix;
-    console.log(this.pos);
 };
 
 TouchImage.prototype.dragStart = function(){
@@ -115,9 +114,12 @@ TouchImage.prototype.transformStart = function(){
         var dx = that.pos.x - event.gesture.center.pageX;
         var dy = event.gesture.center.pageY - that.pos.y;
         console.log(dx, dy);
-        console.log(event.gesture.center);
         that.pos.startRadius = Math.hypot(dy, dx);
-        that.pos.startRadiusAng = Math.atan2(dy, dx);
+        that.pos.startRadiusAng = Math.atan2(dy, dx) + that.pos.ang;
+        console.log(that.pos.ang);
+        console.log(that.pos.startRadiusAng);
+        console.log('end');
+        that.updateTransform();
     };
 };
 

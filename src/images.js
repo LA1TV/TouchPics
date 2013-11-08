@@ -23,8 +23,12 @@ images = function(e){
 TouchImage = function(el, img, src, x, y, scale){
     this.el = el;
     this.img = img;
-    this.button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
-    this.el.appendChild(this.button.div);
+    this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
+    this.el.appendChild(this.close_button.div);
+    this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
+                                          ['top', 0, 7, 'top 0.5s cubic-bezier(0.175, 0.885, 0.7, 1.775)'], 120, -20, this.toggleLock())
+    //cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    this.el.appendChild(this.lock_button.div);
     this.src = src;
     this.transform = {a:1, 
                       b:0, 

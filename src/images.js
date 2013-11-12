@@ -12,16 +12,19 @@ images = function(e){
     
     touchable = document.getElementById('test_item');
     img = new TouchImage(touchable, 
-                         touchable.firstElementChild, 
+                         'http://la1tv.lusu.co.uk/files/2012/01/logo_dark_web_banner.jpg', 
                          0, 
                          0, 
                          1
                         );
 };
 
-TouchImage = function(el, img, x, y, scale){
+TouchImage = function(el, src, x, y, scale){
     this.el = el;
-    this.img = img;
+    this.img = document.createElement('img');
+    this.img.src = src;
+    this.img.className = 'touchable';
+    this.el.appendChild(this.img);
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
@@ -54,7 +57,7 @@ TouchImage = function(el, img, x, y, scale){
         startAng: 0,
         lock: false
     };  
-    this.hammertime = Hammer(this.img, hammer_config);
+    this.hammertime = Hammer(this.el, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
@@ -63,7 +66,8 @@ TouchImage = function(el, img, x, y, scale){
 };
 
 TouchImage.prototype.updateTransform = function(){
-    this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
+    this.img.width = Math.max(Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight), this.pos.scale) * this.img.naturalWidth;
+    console.log(this.img.naturalWidth, this.pos.scale);
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
     this.transform.c = -1 * Math.sin(this.pos.ang);

@@ -13,7 +13,6 @@ images = function(e){
     touchable = document.getElementById('test_item');
     img = new TouchImage(touchable, 
                          touchable.firstElementChild, 
-                         "", 
                          0, 
                          0, 
                          1

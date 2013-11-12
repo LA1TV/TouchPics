@@ -6,7 +6,6 @@ images = function(e){
     Hammer.plugins.showTouches();
     Hammer.plugins.fakeMultitouch();
     
-    //TODO Create the divs in JS
 	//TODO Ability to close divs
 	//TODO Image menu
     
@@ -25,6 +24,8 @@ TouchImage = function(el, src, x, y, scale){
     this.img.src = src;
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
+    //TODO Set scale limit onload and updateTransform
+    this.img.onload = function(e){console.log('loaded')};
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
@@ -45,6 +46,7 @@ TouchImage = function(el, src, x, y, scale){
         this.transform.d+","+
         this.transform.e+","+
         this.transform.f+")";
+    console.log(this.img.naturalWidth, this.img.naturalHeight)
     this.pos = {
         x: x,
         startX: x,
@@ -66,8 +68,9 @@ TouchImage = function(el, src, x, y, scale){
 };
 
 TouchImage.prototype.updateTransform = function(){
+    console.log(this.img.naturalWidth, this.img.naturalHeight)
     this.img.width = Math.max(Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight), this.pos.scale) * this.img.naturalWidth;
-    console.log(this.img.naturalWidth, this.pos.scale);
+    console.log(this.img.naturalWidth, this.pos.scale, this.pos.startScale);
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
     this.transform.c = -1 * Math.sin(this.pos.ang);
@@ -138,6 +141,7 @@ TouchImage.prototype.transformCallback = function(){
         if(that.pos.lock){
             return false;
         }
+        console.log(event.gesture.scale, that.pos.scale, that.pos.startScale, that.pos.scaleLimit);
         that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
         that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.scale = that.pos.startScale * Math.max(that.pos.scaleLimit, event.gesture.scale);

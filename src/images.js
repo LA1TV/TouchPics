@@ -10,18 +10,19 @@ images = function(e){
 	//TODO Image menu
     
     touchable = document.getElementById('test_item');
+    img_el = document.createElement('img');
+    img_el.src = 'http://la1tv.lusu.co.uk/files/2012/01/logo_dark_web_banner.jpg';
     img = new TouchImage(touchable, 
-                         'http://la1tv.lusu.co.uk/files/2012/01/logo_dark_web_banner.jpg', 
+                         img_el, 
                          0, 
                          0, 
                          1
                         );
 };
 
-TouchImage = function(el, src, x, y, scale){
+TouchImage = function(el, img, x, y, scale){
     this.el = el;
-    this.img = document.createElement('img');
-    this.img.src = src;
+    this.img = img;
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
     //TODO Set scale limit onload and updateTransform

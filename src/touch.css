@@ -1,0 +1,40 @@
+body{
+    margin: 0;
+    overflow: hidden;
+}
+
+img.touchable{
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+
+div.touchable{
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    -webkit-transform-origin: top left;
+    position: absolute;
+}
+
+img.button{
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    margin: 0;
+}
+
+div.button{
+    position: relative;
+    right: 0;
+    top: 0;
+    float: left;
+    padding: 0;
+    margin: 0;
+    margin-right: -50px;
+}
+
+img.button.over{
+    margin-left: -50px;
+    position: relative;
+}

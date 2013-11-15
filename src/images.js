@@ -26,7 +26,6 @@ TouchImage = function(el, img, x, y, scale){
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
     //TODO Set scale limit onload and updateTransform
-    this.img.onload = function(e){console.log('loaded')};
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
@@ -69,9 +68,7 @@ TouchImage = function(el, img, x, y, scale){
 };
 
 TouchImage.prototype.updateTransform = function(){
-    console.log(this.img.naturalWidth, this.img.naturalHeight)
-    this.img.width = Math.max(Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight), this.pos.scale) * this.img.naturalWidth;
-    console.log(this.img.naturalWidth, this.pos.scale, this.pos.startScale);
+    this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
     this.transform.c = -1 * Math.sin(this.pos.ang);

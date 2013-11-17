@@ -42,7 +42,7 @@ img.button.over{
 div.menu{
     background: rgb(150,0,0);
     margin: auto;
-    padding: auto;
+    text-align: center;
 }
 
 div.menu_container{
@@ -50,9 +50,13 @@ div.menu_container{
 }
 
 div.menu_button_container{
-    margin: auto;
+    display: inline-block;
 }
 
 div.menu_button{
+    float: left;
+};
 
+img.menu_button{
+    
 };

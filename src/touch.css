@@ -38,3 +38,25 @@ img.button.over{
     margin-left: -50px;
     position: relative;
 }
+
+div.menu{
+    background: rgb(150,0,0);
+    margin: auto;
+    text-align: center;
+}
+
+div.menu_container{
+    position: absolute;   
+}
+
+div.menu_button_container{
+    display: inline-block;
+}
+
+div.menu_button{
+    float: left;
+};
+
+img.menu_button{
+    
+};

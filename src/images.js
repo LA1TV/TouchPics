@@ -6,25 +6,17 @@ images = function(e){
     Hammer.plugins.showTouches();
     Hammer.plugins.fakeMultitouch();
     
-    //TODO Create the divs in JS
 	//TODO Ability to close divs
 	//TODO Image menu
-    
-    touchable = document.getElementById('test_item');
-    img = new TouchImage(touchable, 
-                         'http://la1tv.lusu.co.uk/files/2012/01/logo_dark_web_banner.jpg', 
-                         0, 
-                         0, 
-                         1
-                        );
+
 };
 
-TouchImage = function(el, src, x, y, scale){
+TouchImage = function(el, img, x, y, scale){
     this.el = el;
-    this.img = document.createElement('img');
-    this.img.src = src;
+    this.img = img;
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
+    //TODO Set scale limit onload and updateTransform
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
@@ -45,6 +37,7 @@ TouchImage = function(el, src, x, y, scale){
         this.transform.d+","+
         this.transform.e+","+
         this.transform.f+")";
+    this.img.onload = this.setScaleLimit();
     this.pos = {
         x: x,
         startX: x,
@@ -52,7 +45,6 @@ TouchImage = function(el, src, x, y, scale){
         startY: y,
         scale: scale,
         startScale: scale,
-        scaleLimit: Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight),
         ang: 0,
         startAng: 0,
         lock: false
@@ -65,9 +57,16 @@ TouchImage = function(el, src, x, y, scale){
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
 };
 
+TouchImage.prototype.setScaleLimit = function(){
+    var that = this;
+    return function(e){
+        that.pos.scaleLimit = Math.max(200 / that.img.naturalWidth, 100 / that.img.naturalHeight);
+        that.updateTransform();
+    };
+};
+
 TouchImage.prototype.updateTransform = function(){
-    this.img.width = Math.max(Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight), this.pos.scale) * this.img.naturalWidth;
-    console.log(this.img.naturalWidth, this.pos.scale);
+    this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
     this.transform.c = -1 * Math.sin(this.pos.ang);
@@ -140,7 +139,7 @@ TouchImage.prototype.transformCallback = function(){
         }
         that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
         that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
-        that.pos.scale = that.pos.startScale * Math.max(that.pos.scaleLimit, event.gesture.scale);
+        that.pos.scale = Math.max(that.pos.startScale * event.gesture.scale, that.pos.scaleLimit);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
     };

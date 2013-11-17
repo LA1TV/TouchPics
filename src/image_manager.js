@@ -14,5 +14,5 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
 
 TouchImageManager.prototype.removeImage = function(touchimg){
     this.imageRoot.removeChild(touchimg.el);
-    this.images = this.images.filter(function(e){return e == touchimg});
+    this.images = this.images.filter(function(e){return e != touchimg});
 };

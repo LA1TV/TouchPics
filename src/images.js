@@ -8,16 +8,7 @@ images = function(e){
     
 	//TODO Ability to close divs
 	//TODO Image menu
-    
-    touchable = document.getElementById('test_item');
-    img_el = document.createElement('img');
-    img_el.src = 'http://la1tv.lusu.co.uk/files/2012/01/logo_dark_web_banner.jpg';
-    img = new TouchImage(touchable, 
-                         img_el, 
-                         0, 
-                         0, 
-                         1
-                        );
+
 };
 
 TouchImage = function(el, img, x, y, scale){
@@ -47,6 +38,7 @@ TouchImage = function(el, img, x, y, scale){
         this.transform.e+","+
         this.transform.f+")";
     console.log(this.img.naturalWidth, this.img.naturalHeight)
+    this.img.onload = this.setScaleLimit();
     this.pos = {
         x: x,
         startX: x,
@@ -54,7 +46,6 @@ TouchImage = function(el, img, x, y, scale){
         startY: y,
         scale: scale,
         startScale: scale,
-        scaleLimit: Math.max(200 / this.img.naturalWidth, 100 / this.img.naturalHeight),
         ang: 0,
         startAng: 0,
         lock: false
@@ -65,6 +56,13 @@ TouchImage = function(el, img, x, y, scale){
     this.hammer.drag = this.hammertime.on('drag', this.drag());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
+};
+
+TouchImage.prototype.setScaleLimit = function(){
+    var that = this;
+    return function(e){
+        that.pos.scaleLimit = Math.max(200 / that.img.naturalWidth, 100 / that.img.naturalHeight);
+    };
 };
 
 TouchImage.prototype.updateTransform = function(){

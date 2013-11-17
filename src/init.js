@@ -5,6 +5,9 @@ init = function(e){
         drag_block_horizontal: true, 
         drag_block_vertical:true
     };
+    
+    Hammer.plugins.showTouches();
+    Hammer.plugins.fakeMultitouch();
 
     manager = new TouchImageManager(document.body);
     menu = new Menu(1600,150,50,manager);

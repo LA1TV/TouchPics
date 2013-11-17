@@ -1,3 +1,5 @@
+//TODO z-indexing
+
 TouchImageManager = function(root){
     this.images = [];
     this.imageRoot = root;

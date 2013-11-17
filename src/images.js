@@ -2,21 +2,12 @@ Math.hypot = function(x, y){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
 };
 
-images = function(e){
-    Hammer.plugins.showTouches();
-    Hammer.plugins.fakeMultitouch();
-    
-	//TODO Ability to close divs
-	//TODO Image menu
-
-};
-
+//TODO Ability to close divs
 TouchImage = function(el, img, x, y, scale){
     this.el = el;
     this.img = img;
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
-    //TODO Set scale limit onload and updateTransform
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
@@ -151,5 +142,3 @@ TouchImage.prototype.toggleLock = function(){
         that.pos.lock = !that.pos.lock;
     }
 };
-
-window.onload = images;

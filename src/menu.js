@@ -23,6 +23,8 @@ Menu = function(width, height, bottom, manager){
     document.body.appendChild(this.container);
 };
 
+//TODO Sexy menu
+
 Menu.prototype.createButton = function(src){
     var button = new ImageMenuButton(src, {width:100, height:50}, this, this.manager)
     this.buttons[src] = button;

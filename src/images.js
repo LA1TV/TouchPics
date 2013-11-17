@@ -2,27 +2,24 @@ Math.hypot = function(x, y){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
 };
 
-images = function(e){
-    Hammer.plugins.showTouches();
-    Hammer.plugins.fakeMultitouch();
+TouchImage = function(el, img, x, y, scale, manager){
+    this.manager = manager;
     
-	//TODO Ability to close divs
-	//TODO Image menu
-
-};
-
-TouchImage = function(el, img, x, y, scale){
     this.el = el;
+    
     this.img = img;
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
-    //TODO Set scale limit onload and updateTransform
+    
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
+    
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
                                           ['top', 0, 7, 'top 0.5s cubic-bezier(0.175, 0.885, 0.7, 1.775)'], 120, -20, this.toggleLock())
     //cubic-bezier(0.175, 0.885, 0.32, 1.275)
     this.el.appendChild(this.lock_button.div);
+    
+    //Set up the transform based on initial values
     this.transform = {a:1, 
                       b:0, 
                       c:0, 
@@ -30,6 +27,7 @@ TouchImage = function(el, img, x, y, scale){
                       e:0, 
                       f:0
                      };
+    
     this.transform_matrix = "matrix("+
         this.transform.a+","+
         this.transform.b+","+
@@ -37,6 +35,9 @@ TouchImage = function(el, img, x, y, scale){
         this.transform.d+","+
         this.transform.e+","+
         this.transform.f+")";
+    
+    //We need img.nautralWidth and img.naturalHeight to set the scaleLimit correctly
+    //these values are 0 until the image is loaded so wait until its loaded
     this.img.onload = this.setScaleLimit();
     this.pos = {
         x: x,
@@ -49,6 +50,8 @@ TouchImage = function(el, img, x, y, scale){
         startAng: 0,
         lock: false
     };  
+    
+    //Set up all the Hammer stuff and register against hammer events
     this.hammertime = Hammer(this.el, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
@@ -60,13 +63,22 @@ TouchImage = function(el, img, x, y, scale){
 TouchImage.prototype.setScaleLimit = function(){
     var that = this;
     return function(e){
+        /*Set a scale limit such that the width of the touch image cannot go below 200px
+        //and the height cannot go below 100px, then choose the upper limit so both
+        //inequalities hold
+        */
         that.pos.scaleLimit = Math.max(200 / that.img.naturalWidth, 100 / that.img.naturalHeight);
         that.updateTransform();
     };
 };
 
 TouchImage.prototype.updateTransform = function(){
+    //This math.max may be redundant due to scale being set with respect to the 
+    //limit in the transformCallback
+    //This scales the image by settins its width, making sure its not scaled lower 
+    //than the scale limit
     this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
+    //We then populate the string with the matrix values and set it
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
     this.transform.c = -1 * Math.sin(this.pos.ang);
@@ -107,9 +119,9 @@ TouchImage.prototype.drag = function(){
 };
 
 TouchImage.prototype.tapButton = function(){
-    //TODO Closing divs
+    var that = this;
     return function(event){
-        alert('This is about as redundant as a chocolate teapot'); 
+        that.manager.removeImage(that);
     };
 };
 
@@ -151,5 +163,3 @@ TouchImage.prototype.toggleLock = function(){
         that.pos.lock = !that.pos.lock;
     }
 };
-
-window.onload = images;

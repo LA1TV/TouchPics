@@ -16,6 +16,8 @@ ImageMenuButton = function(src, dim, menu, manager){
     this.hammertime.on('tap', this.onTap());
 };
 
+//TODO Sexy buttons
+
 ImageMenuButton.prototype.onTap = function(){
     var that = this;
     return function(event){

@@ -9,7 +9,7 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
     var div = document.createElement('div');
     div.className = 'touchable';
     this.imageRoot.appendChild(div);
-    this.images.push(new TouchImage(div, img, x, y, scale));
+    this.images.push(new TouchImage(div, img, x, y, scale, this));
 };
 
 TouchImageManager.prototype.removeImage = function(touchimg){

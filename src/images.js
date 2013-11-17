@@ -2,8 +2,8 @@ Math.hypot = function(x, y){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
 };
 
-//TODO Ability to close divs
-TouchImage = function(el, img, x, y, scale){
+TouchImage = function(el, img, x, y, scale, manager){
+    this.manager = manager;
     this.el = el;
     this.img = img;
     this.img.className = 'touchable';
@@ -98,9 +98,9 @@ TouchImage.prototype.drag = function(){
 };
 
 TouchImage.prototype.tapButton = function(){
-    //TODO Closing divs
+    var that = this;
     return function(event){
-        alert('This is about as redundant as a chocolate teapot'); 
+        that.manager.removeImage(that);
     };
 };
 

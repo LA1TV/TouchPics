@@ -38,3 +38,8 @@ img.button.over{
     margin-left: -50px;
     position: relative;
 }
+
+div.imagemenu{
+    position: absolute;
+    background: rgb(150,0,0);
+}

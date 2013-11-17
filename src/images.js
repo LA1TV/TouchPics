@@ -139,7 +139,6 @@ TouchImage.prototype.transformCallback = function(){
         if(that.pos.lock){
             return false;
         }
-        console.log(event.gesture.scale, that.pos.scale, that.pos.startScale, that.pos.scaleLimit);
         that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
         that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.scale = Math.max(that.pos.startScale * event.gesture.scale, that.pos.scaleLimit);

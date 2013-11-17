@@ -37,7 +37,6 @@ TouchImage = function(el, img, x, y, scale){
         this.transform.d+","+
         this.transform.e+","+
         this.transform.f+")";
-    console.log(this.img.naturalWidth, this.img.naturalHeight)
     this.img.onload = this.setScaleLimit();
     this.pos = {
         x: x,
@@ -62,6 +61,7 @@ TouchImage.prototype.setScaleLimit = function(){
     var that = this;
     return function(e){
         that.pos.scaleLimit = Math.max(200 / that.img.naturalWidth, 100 / that.img.naturalHeight);
+        that.updateTransform();
     };
 };
 

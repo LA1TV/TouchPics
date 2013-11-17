@@ -6,15 +6,19 @@ Menu = function(width, height, bottom, manager){
     this.buttons = {};
     
     this.div = document.createElement('div');
-    this.div.className = 'imagemenu';
+    this.div.className = 'menu';
     this.div.style.width = width;
     this.div.style.height = height;
     
     this.container = document.createElement('div');
-    this.container.className = 'imagemenucontainer';
+    this.container.className = 'menu_container';
     this.container.style.width = '100%';
     this.container.style.bottom = this.bottom;
     this.container.appendChild(this.div);
+    
+    this.buttons_div = document.createElement('div');
+    this.buttons_div.className = 'menu_button_container';
+    this.div.appendChild(this.buttons_div);
     
     document.body.appendChild(this.container);
 };
@@ -25,5 +29,5 @@ Menu.prototype.createButton = function(src){
 };
 
 Menu.prototype.addButtonDiv = function(div){
-    this.div.appendChild(div);
+    this.buttons_div.appendChild(div);
 };

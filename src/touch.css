@@ -39,12 +39,20 @@ img.button.over{
     position: relative;
 }
 
-div.imagemenu{
+div.menu{
     background: rgb(150,0,0);
     margin: auto;
     padding: auto;
 }
 
-div.imagemenucontainer{
+div.menu_container{
     position: absolute;   
 }
+
+div.menu_button_container{
+    margin: auto;
+}
+
+div.menu_button{
+
+};

@@ -5,10 +5,10 @@ ImageMenuButton = function(src, dim, menu, manager){
     this.manager = manager;
     
     this.div = document.createElement('div');
-    this.div.className = 'menu button';
+    this.div.className = 'menu_button';
     this.img = document.createElement('img');
     this.img.src = this.src;
-    this.img.className = 'menu button';
+    this.img.className = 'menu_button';
     this.div.appendChild(this.img);
     
     this.img.onload = this.menu.addButtonDiv(this.div);

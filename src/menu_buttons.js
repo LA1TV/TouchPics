@@ -11,6 +11,10 @@ ImageMenuButton = function(src, dim, menu, manager){
     this.img.className = 'menu_button';
     this.div.appendChild(this.img);
     
+    this.helper = document.createElement('div');
+    this.helper.className = 'helper';
+    this.div.appendChild(this.helper);
+    
     this.img.onload = this.menu.addButtonDiv(this.div);
     this.hammertime = Hammer(this.div, hammer_config);
     this.hammertime.on('tap', this.onTap());
@@ -22,6 +26,7 @@ ImageMenuButton.prototype.onTap = function(){
     var that = this;
     return function(event){
         //TODO x, y, scale not hard coded
+        //TODO Don't let newly created images be bigger than the screen res
         that.manager.newImage(that.img.cloneNode(), 50, 50, 1.0);
     };
 };

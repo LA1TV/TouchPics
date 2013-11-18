@@ -55,8 +55,17 @@ div.menu_button_container{
 
 div.menu_button{
     float: left;
-};
+    margin: 0 10px 0 10px;
+}
+
+div.menu_button div.helper{
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
 
 img.menu_button{
-    
-};
+    height: 80%;
+    vertical-align: middle;
+    display: inline-block;
+}

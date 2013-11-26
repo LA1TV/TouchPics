@@ -8,4 +8,4 @@
 
 The project makes us of [Hammer.js](http://eightmedia.github.io/hammer.js/), a multitouch Javascript library and at present is developed and only guaranteed to run on Chrome.
 
-The progress and future plans of the project can be seen in the [plan](https://github.com/LA1TV/TouchPics/blob/master/PLAN.md) page of the wiki.
+The progress and future plans of the project can be seen in the [plan](https://github.com/LA1TV/TouchPics/blob/master/PLAN.md) document.

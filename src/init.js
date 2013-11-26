@@ -16,3 +16,5 @@ init = function(e){
 };
 
 window.onload = init;
+
+//FIXME overflow: hidden on body only blocks scrollwheel scrolling, its still possible to scroll in other ways, e.g. middle mouse click and move

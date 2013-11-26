@@ -143,6 +143,8 @@ TouchImage.prototype.transformStart = function(){
     };
 };
 
+//FIXME Images that have been scaled up will not scale about the gesture center when scaled down
+
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){

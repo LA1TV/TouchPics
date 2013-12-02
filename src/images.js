@@ -77,7 +77,7 @@ TouchImage.prototype.updateTransform = function(){
     //limit in the transformCallback
     //This scales the image by settins its width, making sure its not scaled lower 
     //than the scale limit
-    this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
+    this.img.width = this.pos.scale * this.img.naturalWidth;
     //We then populate the string with the matrix values and set it
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
@@ -98,7 +98,7 @@ TouchImage.prototype.updateTransform = function(){
 TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
-        console.log("DragSTart", event);
+        console.log("DragSTart", event.gesture.center);
         if(that.pos.lock){
             return false;
         }
@@ -146,18 +146,16 @@ TouchImage.prototype.transformStart = function(){
     };
 };
 
-//FIXME Images that have been scaled up will not scale about the gesture center when scaled down
-
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
-        console.log("Transform", event);
+        console.log("Transform", event.gesture.center);
         if(that.pos.lock){
             return false;
         }
-        that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
-        that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.scale = Math.max(that.pos.startScale * event.gesture.scale, that.pos.scaleLimit);
+        that.pos.x = event.gesture.center.pageX + that.pos.scale * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
+        that.pos.y = event.gesture.center.pageY - that.pos.scale * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
     };

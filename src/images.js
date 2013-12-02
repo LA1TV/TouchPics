@@ -98,6 +98,7 @@ TouchImage.prototype.updateTransform = function(){
 TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
+        console.log("DragSTart", event);
         if(that.pos.lock){
             return false;
         }
@@ -109,6 +110,7 @@ TouchImage.prototype.dragStart = function(){
 TouchImage.prototype.drag = function(){
     var that = this;
     return function(event){
+        console.log("Drag", event);
         if(that.pos.lock){
             return false;
         }
@@ -128,6 +130,7 @@ TouchImage.prototype.tapButton = function(){
 TouchImage.prototype.transformStart = function(){
     var that = this;
     return function(event){
+        console.log("TransformStart", event);
         if(that.pos.lock){
             return false;
         }
@@ -148,6 +151,7 @@ TouchImage.prototype.transformStart = function(){
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
+        console.log("Transform", event);
         if(that.pos.lock){
             return false;
         }

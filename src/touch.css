@@ -14,6 +14,7 @@ img.touchable{
     float: left;
     padding: 0;
     margin: 0;
+    -webkit-backface-visibility: hidden;
 }
 
 div.touchable{
@@ -22,6 +23,7 @@ div.touchable{
     display: inline-block;
     -webkit-transform-origin: top left;
     position: absolute;
+    -webkit-backface-visibility: hidden;
 }
 
 img.button{

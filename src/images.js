@@ -98,7 +98,7 @@ TouchImage.prototype.updateTransform = function(){
 TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
-        console.log("DragSTart", event.gesture.center);
+        console.log("DragSTart", event.gesture);
         if(that.pos.lock){
             return false;
         }
@@ -149,7 +149,7 @@ TouchImage.prototype.transformStart = function(){
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
-        console.log("Transform", event.gesture.center);
+        console.log("Transform", event.gesture);
         if(that.pos.lock){
             return false;
         }

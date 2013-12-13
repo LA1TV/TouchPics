@@ -104,6 +104,8 @@ TouchImage.prototype.dragStart = function(){
         }
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
+        that.pos.dx = event.gesture.center.pageX - that.pos.x;
+        that.pos.dy = event.gesture.center.pageY - that.pos.y;
     };
 };
 
@@ -114,8 +116,8 @@ TouchImage.prototype.drag = function(){
         if(that.pos.lock){
             return false;
         }
-        that.pos.x = that.pos.startX + event.gesture.deltaX;
-        that.pos.y = that.pos.startY + event.gesture.deltaY;
+        that.pos.x = event.gesture.center.pageX - that.pos.dx;
+        that.pos.y = event.gesture.center.pageY - that.pos.dy;
         that.updateTransform();
     };
 };
@@ -149,7 +151,7 @@ TouchImage.prototype.transformStart = function(){
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
-        console.log("Transform", event.gesture);
+        //console.log("Transform", event.gesture);
         if(that.pos.lock){
             return false;
         }

@@ -77,7 +77,7 @@ TouchImage.prototype.updateTransform = function(){
     //limit in the transformCallback
     //This scales the image by settins its width, making sure its not scaled lower 
     //than the scale limit
-    this.img.width = Math.max(this.pos.scaleLimit, this.pos.scale) * this.img.naturalWidth;
+    this.img.width = this.pos.scale * this.img.naturalWidth;
     //We then populate the string with the matrix values and set it
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
@@ -98,22 +98,26 @@ TouchImage.prototype.updateTransform = function(){
 TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
+        console.log("DragSTart", event.gesture);
         if(that.pos.lock){
             return false;
         }
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
+        that.pos.dx = event.gesture.center.pageX - that.pos.x;
+        that.pos.dy = event.gesture.center.pageY - that.pos.y;
     };
 };
 
 TouchImage.prototype.drag = function(){
     var that = this;
     return function(event){
+        //console.log("Drag", event);
         if(that.pos.lock){
             return false;
         }
-        that.pos.x = that.pos.startX + event.gesture.deltaX;
-        that.pos.y = that.pos.startY + event.gesture.deltaY;
+        that.pos.x = event.gesture.center.pageX - that.pos.dx;
+        that.pos.y = event.gesture.center.pageY - that.pos.dy;
         that.updateTransform();
     };
 };
@@ -128,6 +132,7 @@ TouchImage.prototype.tapButton = function(){
 TouchImage.prototype.transformStart = function(){
     var that = this;
     return function(event){
+        console.log("TransformStart", event);
         if(that.pos.lock){
             return false;
         }
@@ -137,23 +142,23 @@ TouchImage.prototype.transformStart = function(){
         that.pos.startAng = that.pos.ang;
         var dx = that.pos.x - event.gesture.center.pageX;
         var dy = event.gesture.center.pageY - that.pos.y;
-        that.pos.startRadius = Math.hypot(dy, dx);
+        that.pos.startRadius = Math.hypot(dy, dx) / that.pos.startScale;
         that.pos.startRadiusAng = Math.atan2(dy, dx) + that.pos.ang;
         that.updateTransform();
+        console.log(that.pos);
     };
 };
-
-//FIXME Images that have been scaled up will not scale about the gesture center when scaled down
 
 TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
+        //console.log("Transform", event.gesture);
         if(that.pos.lock){
             return false;
         }
-        that.pos.x = event.gesture.center.pageX + Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
-        that.pos.y = event.gesture.center.pageY - Math.max(that.pos.scaleLimit, event.gesture.scale) * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.scale = Math.max(that.pos.startScale * event.gesture.scale, that.pos.scaleLimit);
+        that.pos.x = event.gesture.center.pageX + that.pos.scale * that.pos.startRadius * Math.cos(that.pos.startRadiusAng - that.pos.ang);
+        that.pos.y = event.gesture.center.pageY - that.pos.scale * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
     };

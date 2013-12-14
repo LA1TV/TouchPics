@@ -20,7 +20,7 @@ Menu = function(width, height, bottom, manager){
     this.buttons_div.className = 'menu_button_container';
     this.div.appendChild(this.buttons_div);
     
-    document.body.appendChild(this.container);
+    manager.imageRoot.appendChild(this.container);
 };
 
 //TODO Sexy menu

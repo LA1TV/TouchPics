@@ -5,6 +5,8 @@ Menu = function(width, height, bottom, manager){
     this.manager = manager;
     this.buttons = {};
     
+    this.manager.setMenuInfo(this.height + this.bottom)
+    
     this.div = document.createElement('div');
     this.div.className = 'menu';
     this.div.style.width = width;

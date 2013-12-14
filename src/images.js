@@ -2,7 +2,7 @@ Math.hypot = function(x, y){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
 };
 
-TouchImage = function(el, img, x, y, scale, manager){
+TouchImage = function(el, img, x, y, scale, ang, manager){
     this.manager = manager;
     
     this.el = el;
@@ -46,8 +46,8 @@ TouchImage = function(el, img, x, y, scale, manager){
         startY: y,
         scale: scale,
         startScale: scale,
-        ang: 0,
-        startAng: 0,
+        ang: ang,
+        startAng: ang,
         lock: false
     };  
     
@@ -73,9 +73,7 @@ TouchImage.prototype.setScaleLimit = function(){
 };
 
 TouchImage.prototype.updateTransform = function(){
-    //This math.max may be redundant due to scale being set with respect to the 
-    //limit in the transformCallback
-    //This scales the image by settins its width, making sure its not scaled lower 
+    //This scales the image by setting its width, making sure its not scaled lower 
     //than the scale limit
     this.img.width = this.pos.scale * this.img.naturalWidth;
     //We then populate the string with the matrix values and set it

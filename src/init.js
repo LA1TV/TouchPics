@@ -16,4 +16,3 @@ init = function(e){
 };
 
 window.onload = init;
-

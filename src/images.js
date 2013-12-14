@@ -112,7 +112,7 @@ TouchImage.prototype.dragStart = function(){
 TouchImage.prototype.drag = function(){
     var that = this;
     return function(event){
-        console.log("Drag", event);
+        //console.log("Drag", event);
         if(that.pos.lock){
             return false;
         }
@@ -142,9 +142,10 @@ TouchImage.prototype.transformStart = function(){
         that.pos.startAng = that.pos.ang;
         var dx = that.pos.x - event.gesture.center.pageX;
         var dy = event.gesture.center.pageY - that.pos.y;
-        that.pos.startRadius = Math.hypot(dy, dx);
+        that.pos.startRadius = Math.hypot(dy, dx) / that.pos.startScale;
         that.pos.startRadiusAng = Math.atan2(dy, dx) + that.pos.ang;
         that.updateTransform();
+        console.log(that.pos);
     };
 };
 

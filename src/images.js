@@ -11,6 +11,10 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
     
+    var n = document.createTextNode(' ');
+    this.el.appendChild(n);
+    setTimeout(function(){n.parentNode.removeChild(n)},50);
+    
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
     

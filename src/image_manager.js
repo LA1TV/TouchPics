@@ -34,9 +34,7 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
     //FIXME Images don't always appear until clicked, some don't redraw correctly over other elements
     //TODO Try making an img from scratch
     //TODO Try adding z-indexes
-    this.images.push(new TouchImage(div, img.cloneNode(), roughX, roughY, imgScale, roughA, this));
-    this.imageRoot.hidden = true;
-    this.imageRoot.hidden = false;
+    this.images.push(new TouchImage(div, img.cloneNode(true), roughX, roughY, imgScale, roughA, this));
 };
 
 TouchImageManager.prototype.removeImage = function(touchimg){

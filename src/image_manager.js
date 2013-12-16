@@ -35,6 +35,9 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
     //TODO Try making an img from scratch
     //TODO Try adding z-indexes
     this.images.push(new TouchImage(div, img.cloneNode(true), roughX, roughY, imgScale, roughA, this));
+    this.images[0].el.style.zIndex = 1;
+    var thing = this.images[0].el
+    setTimeout(function(){thing.style.zIndex = 5},10);
 };
 
 TouchImageManager.prototype.removeImage = function(touchimg){

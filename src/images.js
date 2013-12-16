@@ -11,10 +11,6 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     this.img.className = 'touchable';
     this.el.appendChild(this.img);
     
-    var n = document.createTextNode(' ');
-    this.el.appendChild(n);
-    setTimeout(function(){n.parentNode.removeChild(n)},50);
-    
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
     this.el.appendChild(this.close_button.div);
     
@@ -80,6 +76,7 @@ TouchImage.prototype.updateTransform = function(){
     //This scales the image by setting its width, making sure its not scaled lower 
     //than the scale limit
     this.img.width = this.pos.scale * this.img.naturalWidth;
+
     //We then populate the string with the matrix values and set it
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);

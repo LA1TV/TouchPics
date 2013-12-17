@@ -58,6 +58,7 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     this.hammer.drag = this.hammertime.on('drag', this.drag());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
+    this.hammer.tap = this.hammertime.on('tap', this.tap());
 };
 
 TouchImage.prototype.setScaleLimit = function(){
@@ -71,6 +72,20 @@ TouchImage.prototype.setScaleLimit = function(){
         that.updateTransform();
     };
 };
+
+TouchImage.prototype.setZBase = function(z){
+    this.z = z;  
+    this.el.style.zIndex = z;
+    this.img.style.zIndex = z + 1;
+    this.close_button.setZ(z+2);
+    this.lock_button.setZ(z+2);
+};
+
+TouchImage.prototype.twiddleZ = function(){
+    this.setZBase(this.z+1);
+    var that = this;
+    setTimeout(function(){that.setZBase(that.z-1)}, 20);
+}
 
 TouchImage.prototype.updateTransform = function(){
     //This scales the image by setting its width, making sure its not scaled lower 
@@ -101,6 +116,7 @@ TouchImage.prototype.dragStart = function(){
         if(that.pos.lock){
             return false;
         }
+        that.manager.bringToTop(that);
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.dx = event.gesture.center.pageX - that.pos.x;
@@ -135,6 +151,7 @@ TouchImage.prototype.transformStart = function(){
         if(that.pos.lock){
             return false;
         }
+        that.manager.bringToTop(that);
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.startScale = that.pos.scale;
@@ -160,6 +177,13 @@ TouchImage.prototype.transformCallback = function(){
         that.pos.y = event.gesture.center.pageY - that.pos.scale * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
+    };
+};
+
+TouchImage.prototype.tap = function(){
+    var that = this;
+    return function(e){
+        that.manager.bringToTop(that);
     };
 };
 

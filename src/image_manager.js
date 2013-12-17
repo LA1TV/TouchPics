@@ -1,4 +1,5 @@
 //TODO z-indexing
+var zLayerDepth = 10;
 
 TouchImageManager = function(root){
     this.images = [];
@@ -34,13 +35,21 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
     //FIXME Images don't always appear until clicked, some don't redraw correctly over other elements
     //TODO Try making an img from scratch
     //TODO Try adding z-indexes
-    this.images.push(new TouchImage(div, img.cloneNode(true), roughX, roughY, imgScale, roughA, this));
-    this.images[0].el.style.zIndex = 1;
-    var thing = this.images[0].el
-    setTimeout(function(){thing.style.zIndex = 5},10);
+    var touchImg = new TouchImage(div, img.cloneNode(true), roughX, roughY, imgScale, roughA, this)
+    touchImg.setZBase(this.images.length * zLayerDepth);
+    this.images.push(touchImg);
+    this.images[0].twiddleZ();
 };
 
 TouchImageManager.prototype.removeImage = function(touchimg){
     this.imageRoot.removeChild(touchimg.el);
     this.images = this.images.filter(function(e){return e != touchimg});
 };
+
+TouchImageManager.prototype.bringToTop = function(touchimg){
+    this.images = this.images.filter(function(e){return e != touchimg});
+    this.images.push(touchimg);
+    for(var i=0; i<this.images.length; i++){
+        this.images[i].setZBase(i * zLayerDepth);  
+    };
+}

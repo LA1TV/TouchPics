@@ -72,6 +72,20 @@ TouchImage.prototype.setScaleLimit = function(){
     };
 };
 
+TouchImage.prototype.setZBase = function(z){
+    this.z = z;  
+    this.el.style.zIndex = z;
+    this.img.style.zIndex = z + 1;
+    this.close_button.setZ(z+2);
+    this.lock_button.setZ(z+2);
+};
+
+TouchImage.prototype.twiddleZ = function(){
+    this.setZBase(this.z+1);
+    var that = this;
+    setTimeout(function(){that.setZBase(that.z-1)}, 20);
+}
+
 TouchImage.prototype.updateTransform = function(){
     //This scales the image by setting its width, making sure its not scaled lower 
     //than the scale limit

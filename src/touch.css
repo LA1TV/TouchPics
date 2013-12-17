@@ -53,6 +53,7 @@ div.menu{
     background: rgb(150,0,0);
     margin: auto;
     text-align: center;
+    z-index: -10;
 }
 
 div.menu_container{
@@ -66,6 +67,7 @@ div.menu_button_container{
 div.menu_button{
     float: left;
     margin: 0 10px 0 10px;
+    z-index: -5;
 }
 
 div.menu_button div.helper{

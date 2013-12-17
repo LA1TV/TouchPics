@@ -44,3 +44,11 @@ TouchImageManager.prototype.removeImage = function(touchimg){
     this.imageRoot.removeChild(touchimg.el);
     this.images = this.images.filter(function(e){return e != touchimg});
 };
+
+TouchImageManager.prototype.bringToTop = function(touchimg){
+    this.images = this.images.filter(function(e){return e != touchimg});
+    this.images.push(touchimg);
+    for(var i=0; i<this.images.length; i++){
+        this.images[i].setZBase(i * zLayerDepth);  
+    };
+}

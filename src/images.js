@@ -115,6 +115,7 @@ TouchImage.prototype.dragStart = function(){
         if(that.pos.lock){
             return false;
         }
+        that.manager.bringToTop(that);
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.dx = event.gesture.center.pageX - that.pos.x;
@@ -149,6 +150,7 @@ TouchImage.prototype.transformStart = function(){
         if(that.pos.lock){
             return false;
         }
+        that.manager.bringToTop(that);
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.startScale = that.pos.scale;

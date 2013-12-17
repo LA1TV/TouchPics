@@ -58,6 +58,7 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     this.hammer.drag = this.hammertime.on('drag', this.drag());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
+    this.hammer.tap = this.hammertime.on('tap', this.tap());
 };
 
 TouchImage.prototype.setScaleLimit = function(){
@@ -176,6 +177,13 @@ TouchImage.prototype.transformCallback = function(){
         that.pos.y = event.gesture.center.pageY - that.pos.scale * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
+    };
+};
+
+TouchImage.prototype.tap = function(){
+    var that = this;
+    return function(e){
+        that.manager.bringToTop(that);
     };
 };
 

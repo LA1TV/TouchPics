@@ -18,6 +18,8 @@ ImageMenuButton = function(src, dim, menu, manager){
     this.img.onload = this.menu.addButtonDiv(this.div);
     this.hammertime = Hammer(this.div, hammer_config);
     this.hammertime.on('tap', this.onTap());
+    
+    this.img.onload = this.menu.updateContainerWidth();
 };
 
 //TODO Sexy buttons

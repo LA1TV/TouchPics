@@ -35,3 +35,16 @@ Menu.prototype.createButton = function(src){
 Menu.prototype.addButtonDiv = function(div){
     this.buttons_div.appendChild(div);
 };
+
+Menu.prototype.updateContainerWidth = function(){
+    var that = this;
+    return function(e){
+        var width = 0;
+        for(var button in that.buttons){
+            width += that.buttons[button].div.clientWidth + 2 * 10;
+        };
+        
+        that.buttons_div.style.width = width;
+        return width;
+    };
+};

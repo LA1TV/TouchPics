@@ -46,13 +46,13 @@ Menu.prototype.addButtonDiv = function(div){
 Menu.prototype.updateContainerWidth = function(){
     var that = this;
     return function(e){
-        var width = 0;
+        that.containerWidth = 0;
         for(var button in that.buttons){
-            width += that.buttons[button].div.clientWidth + 2 * 10;
+            that.containerWidth += that.buttons[button].div.clientWidth + 2 * 10;
         };
         
-        that.buttons_div.style.width = width;
-        return width;
+        that.buttons_div.style.width = that.containerWidth;;
+        //TODO Check if repositioning is needed
     };
 };
 
@@ -69,6 +69,10 @@ Menu.prototype.containerDrag = function(){
     var that = this;   
     return function(event){
         that.pos = that.startPos + event.gesture.center.pageX - that.startX;
+        var maxPos = that.containerWidth - that.width;
+        var minPos = that.width - that.containerWidth;
+        that.pos = Math.min(that.pos, maxPos);
+        that.pos = Math.max(that.pos, minPos);
         that.buttons_div.style.left = that.pos;
     };
 };

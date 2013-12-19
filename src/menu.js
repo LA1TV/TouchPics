@@ -108,10 +108,11 @@ Menu.prototype.update = function(){
     var that = this;
     return function(e){
         //TODO Limit this
+        //TODO Sproinging at limits
         that.pos += that.velocity * 1000 * that.updateInterval/1000;
         that.buttons_div.style.left = that.pos;
-        that.velocity *= Math.pow(0.99, that.updateInterval);
-        if(Math.abs(that.velocity) < 0.1){
+        that.velocity *= Math.pow(0.998, that.updateInterval);
+        if(Math.abs(that.velocity) < 0.05){
             that.velocity = 0;   
         }
         if(Math.abs(that.velocity) > 0){

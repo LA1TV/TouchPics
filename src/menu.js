@@ -59,7 +59,6 @@ Menu.prototype.updateContainerWidth = function(){
 Menu.prototype.containerDragStart = function(){
     var that = this;
     return function(event){
-        console.log(event);
         that.startPos = that.pos;
         that.startX = event.gesture.center.pageX;
     };
@@ -73,6 +72,9 @@ Menu.prototype.containerDrag = function(){
         var minPos = that.width - that.containerWidth;
         that.pos = Math.min(that.pos, maxPos);
         that.pos = Math.max(that.pos, minPos);
+        if(that.pos == maxPos || that.pos == minPos){
+            that.containerDragStart()(event);   
+        }
         that.buttons_div.style.left = that.pos;
     };
 };

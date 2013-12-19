@@ -82,9 +82,12 @@ TouchImage.prototype.setZBase = function(z){
 };
 
 TouchImage.prototype.twiddleZ = function(){
-    this.setZBase(this.z+1);
     var that = this;
-    setTimeout(function(){that.setZBase(that.z-1)}, 20);
+    return function(e){
+        console.log(e);
+        that.setZBase(that.z+1);
+        setTimeout(function(){that.setZBase(that.z-1)}, 20);
+    }
 }
 
 TouchImage.prototype.updateTransform = function(){
@@ -183,7 +186,9 @@ TouchImage.prototype.transformCallback = function(){
 TouchImage.prototype.tap = function(){
     var that = this;
     return function(e){
-        that.manager.bringToTop(that);
+        if(e.srcElement == that.img){
+            that.manager.bringToTop(that);
+        }
     };
 };
 

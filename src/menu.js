@@ -20,7 +20,14 @@ Menu = function(width, height, bottom, manager){
     
     this.buttons_div = document.createElement('div');
     this.buttons_div.className = 'menu_button_container';
+    this.buttons_div.style.left = 0;
+    this.pos = 0;
     this.div.appendChild(this.buttons_div);
+    
+    this.hammertime = Hammer(this.buttons_div, hammer_config);
+    this.hammer = {};
+    this.hammer.dragstart = this.hammertime.on('dragstart', this.containerDragStart());
+    this.hammer.drag = this.hammertime.on('drag', this.containerDrag());
     
     manager.imageRoot.appendChild(this.container);
 };
@@ -46,5 +53,22 @@ Menu.prototype.updateContainerWidth = function(){
         
         that.buttons_div.style.width = width;
         return width;
+    };
+};
+
+Menu.prototype.containerDragStart = function(){
+    var that = this;
+    return function(event){
+        console.log(event);
+        that.startPos = that.pos;
+        that.startX = event.gesture.center.pageX;
+    };
+};
+
+Menu.prototype.containerDrag = function(){
+    var that = this;   
+    return function(event){
+        that.pos = that.startPos + event.gesture.center.pageX - that.startX;
+        that.buttons_div.style.left = that.pos;
     };
 };

@@ -64,6 +64,7 @@ div.menu_button_container{
     display: inline-block;
     height: 150px;
     overflow: hidden;
+    position: relative;
 }
 
 div.menu_button{

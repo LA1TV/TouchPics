@@ -15,11 +15,11 @@ ImageMenuButton = function(src, dim, menu, manager){
     this.helper.className = 'helper';
     this.div.appendChild(this.helper);
     
-    this.img.onload = this.menu.addButtonDiv(this.div);
+    this.img.addEventListener('load', this.menu.addButtonDiv(this.div));
     this.hammertime = Hammer(this.div, hammer_config);
     this.hammertime.on('tap', this.onTap());
     
-    this.img.onload = this.menu.updateContainerWidth();
+    this.img.addEventListener('load', this.menu.updateContainerWidth());
 };
 
 //TODO Sexy buttons

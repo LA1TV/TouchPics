@@ -49,15 +49,23 @@ img.button.over{
     position: relative;
 }
 
+div.menu_swipe_area{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
 div.menu{
     background: rgb(150,0,0);
     margin: auto;
     text-align: center;
     z-index: -10;
+    overflow: hidden;
 }
 
 div.menu_container{
-    position: absolute;   
+    -webkit-transition-property: margin-bottom, margin-top;
+    -webkit-transition-duration: 1s, 1s;
 }
 
 div.menu_button_container{

@@ -15,7 +15,8 @@ Menu = function(width, height, bottom, manager){
     this.container = document.createElement('div');
     this.container.className = 'menu_container';
     this.container.style.width = '100%';
-    this.container.style.bottom = this.bottom;
+    this.container.style.marginBottom = this.bottom;
+    this.container.style.marginTop = 0;
     this.container.appendChild(this.div);
     
     this.buttons_div = document.createElement('div');
@@ -26,13 +27,21 @@ Menu = function(width, height, bottom, manager){
     this.updateInterval = 20;
     this.div.appendChild(this.buttons_div);
     
+    this.menu_swipe_area = document.createElement('div');
+    this.menu_swipe_area.className = 'menu_swipe_area';
+    this.menu_swipe_area.appendChild(this.container);
+    
     this.hammertime = Hammer(this.buttons_div, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.containerDragStart());
     this.hammer.drag = this.hammertime.on('drag', this.containerDrag());
     this.hammer.swipe = this.hammertime.on('swipe', this.containerSwipe());
     
-    manager.imageRoot.appendChild(this.container);
+    this.swipe_hammertime = Hammer(this.menu_swipe_area, hammer_config);
+    this.hammer.close = this.swipe_hammertime.on('swipedown', this.hideMenu());
+    this.hammer.open = this.swipe_hammertime.on('swipeup', this.showMenu());
+    
+    manager.imageRoot.appendChild(this.menu_swipe_area);
 };
 
 //TODO Sexy menu
@@ -118,5 +127,23 @@ Menu.prototype.update = function(){
         if(Math.abs(that.velocity) > 0){
             setTimeout(that.update(), that.updateInterval)   
         }
+    };
+};
+
+Menu.prototype.hideMenu = function(){
+    var that = this;
+    return function(event){
+        that.bottom = -200
+        that.container.style.marginBottom = that.bottom;
+        that.container.style.marginTop = 50 + 200;
+    };
+};
+
+Menu.prototype.showMenu = function(){
+    var that = this;
+    return function(event){
+        that.bottom = 50;
+        that.container.style.marginBottom = that.bottom;
+        that.container.style.marginTop = 0;
     };
 };

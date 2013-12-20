@@ -108,6 +108,21 @@ Menu.prototype.containerSwipe = function(){
     };
 };
 
+Menu.prototype.upperBound = function(){
+    return 0; //TODO Fix this for containerWidth < width
+};  
+
+Menu.prototype.lowerBound = function(){
+    return this.width - this.containerWidth;    
+};
+
+Menu.prototype.checkBounds = function(){
+    var maxPos = this.upperBound();
+    var minPos = this.lowerBound();
+    //TRUE means inside the bounds
+    return (this.pos < maxPos && this.pos) > minPos;
+};
+
 Menu.prototype.setContainerScrollVelocity = function(v){
     this.velocity = v;   
     setTimeout(this.update(), this.updateInterval);

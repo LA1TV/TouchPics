@@ -2,7 +2,7 @@ Math.hypot = function(x, y){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
 };
 
-TouchImage = function(el, img, x, y, scale, manager){
+TouchImage = function(el, img, x, y, scale, ang, manager){
     this.manager = manager;
     
     this.el = el;
@@ -46,8 +46,8 @@ TouchImage = function(el, img, x, y, scale, manager){
         startY: y,
         scale: scale,
         startScale: scale,
-        ang: 0,
-        startAng: 0,
+        ang: ang,
+        startAng: ang,
         lock: false
     };  
     
@@ -58,6 +58,7 @@ TouchImage = function(el, img, x, y, scale, manager){
     this.hammer.drag = this.hammertime.on('drag', this.drag());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
+    this.hammer.tap = this.hammertime.on('tap', this.tap());
 };
 
 TouchImage.prototype.setScaleLimit = function(){
@@ -72,12 +73,28 @@ TouchImage.prototype.setScaleLimit = function(){
     };
 };
 
+TouchImage.prototype.setZBase = function(z){
+    this.z = z;  
+    this.el.style.zIndex = z;
+    this.img.style.zIndex = z + 1;
+    this.close_button.setZ(z+2);
+    this.lock_button.setZ(z+2);
+};
+
+TouchImage.prototype.twiddleZ = function(){
+    var that = this;
+    return function(e){
+        console.log(e);
+        that.setZBase(that.z+1);
+        setTimeout(function(){that.setZBase(that.z-1)}, 20);
+    }
+}
+
 TouchImage.prototype.updateTransform = function(){
-    //This math.max may be redundant due to scale being set with respect to the 
-    //limit in the transformCallback
-    //This scales the image by settins its width, making sure its not scaled lower 
+    //This scales the image by setting its width, making sure its not scaled lower 
     //than the scale limit
     this.img.width = this.pos.scale * this.img.naturalWidth;
+
     //We then populate the string with the matrix values and set it
     this.transform.a = Math.cos(this.pos.ang);
     this.transform.b = Math.sin(this.pos.ang);
@@ -102,6 +119,7 @@ TouchImage.prototype.dragStart = function(){
         if(that.pos.lock){
             return false;
         }
+        that.manager.bringToTop(that);
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.dx = event.gesture.center.pageX - that.pos.x;
@@ -136,6 +154,7 @@ TouchImage.prototype.transformStart = function(){
         if(that.pos.lock){
             return false;
         }
+        that.manager.bringToTop(that);
         that.pos.startX = that.pos.x;
         that.pos.startY = that.pos.y;
         that.pos.startScale = that.pos.scale;
@@ -161,6 +180,15 @@ TouchImage.prototype.transformCallback = function(){
         that.pos.y = event.gesture.center.pageY - that.pos.scale * that.pos.startRadius * Math.sin(that.pos.startRadiusAng - that.pos.ang);
         that.pos.ang = that.pos.startAng + Math.PI * event.gesture.rotation/180;
         that.updateTransform();        
+    };
+};
+
+TouchImage.prototype.tap = function(){
+    var that = this;
+    return function(e){
+        if(e.srcElement == that.img){
+            that.manager.bringToTop(that);
+        }
     };
 };
 

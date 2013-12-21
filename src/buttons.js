@@ -26,6 +26,12 @@ TouchButton.prototype.callFunc = function(){
     };
 };
 
+TouchButton.prototype.setZ = function(z){
+    this.z = z;
+    this.div.style.zIndex = z;
+    this.img.style.zIndex = z+1;
+};
+
 AnimTouchButton = function(src1, src2, anim, right, top, func){
     /*
     anim is an array with:
@@ -68,6 +74,13 @@ AnimTouchButton = function(src1, src2, anim, right, top, func){
     //TODO more than simple toggling
     this.state = false;
 }
+
+AnimTouchButton.prototype.setZ = function(z){
+    this.z = z;
+    this.div.style.zIndex = z;
+    this.img1.style.zIndex = z+1;
+    this.img2.style.zIndex = z+2;
+};
 
 AnimTouchButton.prototype.callFunc = function(){
     var that = this;

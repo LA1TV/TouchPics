@@ -14,7 +14,6 @@ img.touchable{
     float: left;
     padding: 0;
     margin: 0;
-    -webkit-backface-visibility: hidden;
 }
 
 div.touchable{
@@ -24,6 +23,8 @@ div.touchable{
     -webkit-transform-origin: top left;
     position: absolute;
     -webkit-backface-visibility: hidden;
+    outline: 1px solid transparent;
+    z-index: 5;
 }
 
 img.button{
@@ -48,23 +49,36 @@ img.button.over{
     position: relative;
 }
 
+div.menu_swipe_area{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
 div.menu{
     background: rgb(150,0,0);
     margin: auto;
     text-align: center;
+    z-index: -10;
+    overflow: hidden;
 }
 
 div.menu_container{
-    position: absolute;   
+    -webkit-transition-property: margin-bottom, margin-top;
+    -webkit-transition-duration: 1s, 1s;
 }
 
 div.menu_button_container{
     display: inline-block;
+    height: 150px;
+    overflow: hidden;
+    position: relative;
 }
 
 div.menu_button{
     float: left;
     margin: 0 10px 0 10px;
+    z-index: -5;
 }
 
 div.menu_button div.helper{

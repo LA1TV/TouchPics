@@ -38,7 +38,7 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
     var touchImg = new TouchImage(div, img.cloneNode(true), roughX, roughY, imgScale, roughA, this)
     touchImg.setZBase(this.images.length * zLayerDepth);
     this.images.push(touchImg);
-    this.images[0].twiddleZ();
+    touchImg.img.addEventListener('load', this.images[0].twiddleZ());
 };
 
 TouchImageManager.prototype.removeImage = function(touchimg){

@@ -7,11 +7,12 @@ Plan
   * :white_check_mark:Rotating
   * :white_check_mark:Locking
   * :x:Drawing on images
+  * :white_check_mark:Z Ordering of images, images come to the top when touched
 * :x:Image menu
   * :white_check_mark:Opening new images
   * :white_check_mark:Closing open images
-  * :x:Newly opened images open at reasonable scale
-  * :x:Newly opened images open in a reasonable location (may be tricky to do something complex like avoid placing them on top of other images)
+  * :white_check_mark:Newly opened images open at reasonable scale
+  * :white_check_mark:Newly opened images open in a reasonable location ~~(may be tricky to do something complex like avoid placing them on top of other images)~~ (Didn't even try that)
   * :white_check_mark:Images in menu scale to menu height
   * :x:Images in menu have a nice border
   * :x:Scroll through images in menu

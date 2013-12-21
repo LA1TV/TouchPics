@@ -71,6 +71,7 @@ Menu.prototype.updateContainerWidth = function(){
 Menu.prototype.containerDragStart = function(){
     var that = this;
     return function(event){
+        that.buttons_div.style.webkitTransition = "";
         that.startPos = that.pos;
         that.startX = event.gesture.center.pageX;
     };
@@ -120,11 +121,12 @@ Menu.prototype.checkBounds = function(){
     var maxPos = this.upperBound();
     var minPos = this.lowerBound();
     //TRUE means inside the bounds
-    return (this.pos < maxPos && this.pos) > minPos;
+    return this.pos < maxPos && this.pos > minPos;
 };
 
 Menu.prototype.setContainerScrollVelocity = function(v){
     this.velocity = v;   
+    this.buttons_div.style.webkitTransition = "";
     setTimeout(this.update(), this.updateInterval);
 };
 
@@ -133,14 +135,28 @@ Menu.prototype.update = function(){
     return function(e){
         //TODO Limit this
         //TODO Sproinging at limits
-        that.pos += that.velocity * 1000 * that.updateInterval/1000;
-        that.buttons_div.style.left = that.pos;
-        that.velocity *= Math.pow(0.998, that.updateInterval);
-        if(Math.abs(that.velocity) < 0.05){
-            that.velocity = 0;   
+        if(that.velocity != 0){
+            that.pos += that.velocity * 1000 * that.updateInterval/1000;
+            that.buttons_div.style.left = that.pos;
+            if(that.checkBounds()){
+                that.velocity *= Math.pow(0.998, that.updateInterval);
+            }else{
+                that.velocity *= Math.pow(0.99, that.updateInterval); 
+            }
+            if(Math.abs(that.velocity) < 0.05){
+                that.velocity = 0;   
+            }
         }
         if(Math.abs(that.velocity) > 0){
             setTimeout(that.update(), that.updateInterval)   
+        }
+        if(that.velocity == 0 && !that.checkBounds()){
+            that.buttons_div.style.webkitTransition = "left 1s";
+            if(that.pos < that.lowerBound()){
+                that.buttons_div.style.left = that.lowerBound();
+            }else{
+                that.buttons_div.style.left = that.upperBound();   
+            }
         }
     };
 };

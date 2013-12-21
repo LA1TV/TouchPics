@@ -15,7 +15,7 @@ Plan
   * :white_check_mark:Newly opened images open in a reasonable location ~~(may be tricky to do something complex like avoid placing them on top of other images)~~ (Didn't even try that)
   * :white_check_mark:Images in menu scale to menu height
   * :x:Images in menu have a nice border
-  * :x:Scroll through images in menu
+  * :white_check_mark:Scroll through images in menu
 * :x:Backend server - to allow remote changing of settings (Will be created as a separate repository, will probably be python/flask)
   * :x:Change pictures in menu remotely
   * :x:File picker to choose images
@@ -27,6 +27,6 @@ Plan
   * :x:Images shrink on close
   * :x:Images expand on open 
   * :x:Images in menu respond when tapped
-  * :x:Menu can swipe scroll
+  * :white_check_mark:Menu can swipe scroll
   * :x:Menu will drop down and pop back up when the images on it are changed
-  * :x:Hide the menu by swiping down/Open the menu by swiping up
+  * :white_check_mark:Hide the menu by swiping down/Open the menu by swiping up

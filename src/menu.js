@@ -35,6 +35,7 @@ Menu = function(width, height, bottom, manager){
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.containerDragStart());
     this.hammer.drag = this.hammertime.on('drag', this.containerDrag());
+    this.hammer.dragEnd = this.hammertime.on('dragend', this.containerDragEnd());
     this.hammer.swipe = this.hammertime.on('swipe', this.containerSwipe());
     
     this.swipe_hammertime = Hammer(this.menu_swipe_area, hammer_config);
@@ -81,14 +82,23 @@ Menu.prototype.containerDrag = function(){
     var that = this;   
     return function(event){
         that.pos = that.startPos + event.gesture.center.pageX - that.startX;
-        var maxPos = 0 //TODO Fix this for containerWidth < width
-        var minPos = that.width - that.containerWidth;
-        that.pos = Math.min(that.pos, maxPos);
-        that.pos = Math.max(that.pos, minPos);
-        if(that.pos == maxPos || that.pos == minPos){
-            that.containerDragStart()(event);   
-        }
+//        var maxPos = 0 //TODO Fix this for containerWidth < width
+//        var minPos = that.width - that.containerWidth;
+//        that.pos = Math.min(that.pos, maxPos);
+//        that.pos = Math.max(that.pos, minPos);
+//        if(that.pos == maxPos || that.pos == minPos){
+//            that.containerDragStart()(event);   
+//        }
         that.buttons_div.style.left = that.pos;
+    };
+};
+
+Menu.prototype.containerDragEnd = function(){
+    var that = this;
+    return function(event){
+        if(that.velocity == 0){
+            that.setContainerScrollVelocity(0);
+        };
     };
 };
 
@@ -147,15 +157,17 @@ Menu.prototype.update = function(){
                 that.velocity = 0;   
             }
         }
-        if(Math.abs(that.velocity) > 0){
+        if(that.velocity != 0){
             setTimeout(that.update(), that.updateInterval)   
         }
         if(that.velocity == 0 && !that.checkBounds()){
             that.buttons_div.style.webkitTransition = "left 1s";
             if(that.pos < that.lowerBound()){
                 that.buttons_div.style.left = that.lowerBound();
+                that.pos = that.lowerBound();
             }else{
                 that.buttons_div.style.left = that.upperBound();   
+                that.pos = that.upperBound();
             }
         }
     };

@@ -18,6 +18,8 @@ DrawingMenu = function(width, height, manager){
     this.hammertime = Hammer(this.div, hammer_config);
     this.swipe_hammertime = Hammer(this.drawing_menu_swipe_area, hammer_config);
     this.hammer = {};
+    this.hammer.close = this.swipe_hammertime.on('swipeleft', this.hideMenu());
+    this.hammer.open = this.swipe_hammertime.on('swiperight', this.showMenu());
 };
 
 DrawingMenu.prototype.hideMenu = function(){

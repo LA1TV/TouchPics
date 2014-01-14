@@ -96,3 +96,23 @@ img.menu_button{
     -webkit-transition-property: bottom;
     -webkit-transition-duration: 250ms;
 }
+
+div.drawing_menu{
+    height: 400px;
+    width: 100px;
+    position: relative;
+    top: 25px;
+    left: 0px;
+    border: 0px solid;
+    border-radius: 0 40px 40px 0;
+    background-color: green;
+}
+
+div.drawing_menu_swipe_area{
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 600px;
+    width: 250px;
+    outline: solid 1px black;
+}

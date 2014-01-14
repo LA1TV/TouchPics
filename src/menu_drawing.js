@@ -1,4 +1,7 @@
 DrawingMenu = function(width, height, manager){
+    this.width = width;
+    this.height = height;
+    
     this.div = document.createElement('div');
     this.div.className = "drawing_menu";
     this.div.style['height'] = height;
@@ -11,4 +14,22 @@ DrawingMenu = function(width, height, manager){
     this.drawing_menu_swipe_area.appendChild(this.div);
     
     document.body.appendChild(this.drawing_menu_swipe_area);
+    
+    this.hammertime = Hammer(this.div, hammer_config);
+    this.swipe_hammertime = Hammer(this.drawing_menu_swipe_area, hammer_config);
+    this.hammer = {};
+};
+
+DrawingMenu.prototype.hideMenu = function(){
+    var that = this;
+    return function(){
+        that.div.style['left'] = -that.width; 
+    };
+};
+
+DrawingMenu.prototype.showMenu = function(){
+    var that = this;
+    return function(){
+        that.div.style['left'] = 0;  
+    };
 };

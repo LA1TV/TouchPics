@@ -106,6 +106,8 @@ div.drawing_menu{
     border: 0px solid;
     border-radius: 0 40px 40px 0;
     background-color: green;
+    -webkit-transition-property: left;
+    -webkit-transition-duration: 1s;
 }
 
 div.drawing_menu_swipe_area{

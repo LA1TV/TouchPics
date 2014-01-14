@@ -6,6 +6,7 @@ TouchImageManager = function(root){
     this.imageRoot = root;
     window.addEventListener('resize', this.windowResize());
     this.windowHeight = window.innerHeight;
+    this.drawing = false;
 };
 
 TouchImageManager.prototype.setMenuInfo = function(height){
@@ -53,3 +54,10 @@ TouchImageManager.prototype.bringToTop = function(touchimg){
         this.images[i].setZBase(i * zLayerDepth);  
     };
 }
+
+TouchImageManager.prototype.toggleDraw = function(){
+    var that = this;
+    return function(){
+        that.drawing = !that.drawing;  
+    };
+};

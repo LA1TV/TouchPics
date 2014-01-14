@@ -116,7 +116,7 @@ TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
         console.log("DragSTart", event.gesture);
-        if(that.pos.lock){
+        if(that.pos.lock || that.manager.drawing){
             return false;
         }
         that.manager.bringToTop(that);
@@ -131,7 +131,7 @@ TouchImage.prototype.drag = function(){
     var that = this;
     return function(event){
         //console.log("Drag", event);
-        if(that.pos.lock){
+        if(that.pos.lock || that.manager.drawing){
             return false;
         }
         that.pos.x = event.gesture.center.pageX - that.pos.dx;
@@ -151,7 +151,7 @@ TouchImage.prototype.transformStart = function(){
     var that = this;
     return function(event){
         console.log("TransformStart", event);
-        if(that.pos.lock){
+        if(that.pos.lock || that.manager.drawing){
             return false;
         }
         that.manager.bringToTop(that);
@@ -172,7 +172,7 @@ TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
         //console.log("Transform", event.gesture);
-        if(that.pos.lock){
+        if(that.pos.lock || that.manager.drawing){
             return false;
         }
         that.pos.scale = Math.max(that.pos.startScale * event.gesture.scale, that.pos.scaleLimit);

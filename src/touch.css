@@ -91,4 +91,8 @@ img.menu_button{
     height: 80%;
     vertical-align: middle;
     display: inline-block;
+    position: relative;
+    bottom: 0;
+    -webkit-transition-property: bottom;
+    -webkit-transition-duration: 250ms;
 }

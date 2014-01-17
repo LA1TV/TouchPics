@@ -1,6 +1,7 @@
 DrawingMenu = function(width, height, manager){
     this.width = width;
     this.height = height;
+    this.open = true;
     
     this.div = document.createElement('div');
     this.div.className = "drawing_menu";
@@ -25,6 +26,7 @@ DrawingMenu = function(width, height, manager){
 DrawingMenu.prototype.hideMenu = function(){
     var that = this;
     return function(){
+        that.open = false;
         that.div.style['left'] = -that.width; 
     };
 };
@@ -32,6 +34,7 @@ DrawingMenu.prototype.hideMenu = function(){
 DrawingMenu.prototype.showMenu = function(){
     var that = this;
     return function(){
+        that.open = true;
         that.div.style['left'] = 0;  
     };
 };

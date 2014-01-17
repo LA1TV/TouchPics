@@ -51,3 +51,8 @@ ImageMenuButton.prototype.tapFinish = function(){
         that.img.style.bottom = 0;
     };
 };
+
+DrawingMenuButton = function(src, func){
+    this.src = src;
+    this.func = func;
+};

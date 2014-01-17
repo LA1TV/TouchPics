@@ -15,7 +15,7 @@ DrawingMenu = function(width, height, manager){
     
     document.body.appendChild(this.drawing_menu_swipe_area);
     
-    this.hammertime = Hammer(this.div, hammer_config);
+    //this.hammertime = Hammer(this.div, hammer_config);
     this.swipe_hammertime = Hammer(this.drawing_menu_swipe_area, hammer_config);
     this.hammer = {};
     this.hammer.close = this.swipe_hammertime.on('swipeleft', this.hideMenu());

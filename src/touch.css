@@ -114,7 +114,5 @@ div.drawing_menu_swipe_area{
     position: fixed;
     left: 0;
     top: 0;
-    height: 600px;
-    width: 250px;
     outline: solid 1px black;
 }

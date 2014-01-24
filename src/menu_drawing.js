@@ -11,7 +11,7 @@ DrawingMenu = function(width, height, manager){
     this.drawing_menu_swipe_area = document.createElement('div');
     this.drawing_menu_swipe_area.className = "drawing_menu_swipe_area";
     this.drawing_menu_swipe_area.style['height'] = height + 50;
-    this.drawing_menu_swipe_area.style['width'] = width + 25;
+    this.drawing_menu_swipe_area.style['width'] = width + 75;
     this.drawing_menu_swipe_area.appendChild(this.div);
     
     document.body.appendChild(this.drawing_menu_swipe_area);

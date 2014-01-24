@@ -146,6 +146,7 @@ TouchImage.prototype.drag = function(){
         }
         if(that.manager.drawing){
             that.draw_points.push([event.gesture.x, event.gesture.y]);
+            console.log(that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY));
             return false;
         }
         that.pos.x = event.gesture.center.pageX - that.pos.dx;
@@ -212,3 +213,12 @@ TouchImage.prototype.toggleLock = function(){
         that.pos.lock = !that.pos.lock;
     }
 };
+
+TouchImage.prototype.globalToLocal = function(gx, gy){
+    var x = gx - this.pos.x;
+    //Make it be negative if a point is below our 'origin'
+    var y = this.pos.y - gy;
+    var a = Math.atan2(y, x) + this.pos.ang;
+    var r = Math.hypot(x, y);
+    return [r*Math.cos(a), r*Math.sin(a)];
+}

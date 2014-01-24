@@ -22,7 +22,7 @@ DrawingMenu = function(width, height, manager){
     this.hammer.close = this.swipe_hammertime.on('swipeleft', this.hideMenu());
     this.hammer.open = this.swipe_hammertime.on('swiperight', this.showMenu());
     
-    this.addButton("assets/draw.svg", 0, 0, console.log);
+    this.addButton("assets/draw.svg", 0, 0, manager.toggleDraw());
 };
 
 DrawingMenu.prototype.hideMenu = function(){

@@ -19,6 +19,8 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     //cubic-bezier(0.175, 0.885, 0.32, 1.275)
     this.el.appendChild(this.lock_button.div);
     
+    this.draw_points = [];
+    
     //Set up the transform based on initial values
     this.transform = {a:1, 
                       b:0, 
@@ -131,7 +133,11 @@ TouchImage.prototype.drag = function(){
     var that = this;
     return function(event){
         //console.log("Drag", event);
-        if(that.pos.lock || that.manager.drawing){
+        if(that.pos.lock){
+            return false;
+        }
+        if(that.manager.drawing){
+            that.draw_points.push([event.gesture.x, event.gesture.y]);
             return false;
         }
         that.pos.x = event.gesture.center.pageX - that.pos.dx;

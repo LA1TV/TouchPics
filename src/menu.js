@@ -81,6 +81,9 @@ Menu.prototype.containerDragStart = function(){
 Menu.prototype.containerDrag = function(){
     var that = this;   
     return function(event){
+        if(that.manager.drawing){
+            return false;   
+        }
         that.pos = that.startPos + event.gesture.center.pageX - that.startX;
 //        var maxPos = 0 //TODO Fix this for containerWidth < width
 //        var minPos = that.width - that.containerWidth;
@@ -105,6 +108,9 @@ Menu.prototype.containerDragEnd = function(){
 Menu.prototype.containerSwipe = function(){
     var that = this;
     return function(event){
+        if(that.manager.drawing){
+            return false;   
+        }
         var modifier = 0
         //lolswitch
         if(event.gesture.direction == "right"){

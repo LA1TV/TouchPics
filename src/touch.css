@@ -98,8 +98,6 @@ img.menu_button{
 }
 
 div.drawing_menu{
-    height: 400px;
-    width: 100px;
     position: relative;
     top: 25px;
     left: 0px;
@@ -108,6 +106,7 @@ div.drawing_menu{
     background-color: rgb(150,0,0);
     -webkit-transition-property: left;
     -webkit-transition-duration: 1s;
+    padding: 10px;
 }
 
 div.drawing_menu_swipe_area{

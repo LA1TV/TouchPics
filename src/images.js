@@ -62,6 +62,7 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
+    this.hammer.dragend = this.hammertime.on('dragend', this.dragEnd());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
     this.hammer.tap = this.hammertime.on('tap', this.tap());
@@ -126,7 +127,12 @@ TouchImage.prototype.dragStart = function(){
     var that = this;
     return function(event){
         console.log("DragSTart", event.gesture);
-        if(that.pos.lock || that.manager.drawing){
+        if(that.pos.lock){
+            return false;
+        }
+        if(that.manager.drawing){
+            var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
+            that.draw_points.push([locals[0], locals[1], 'start']);
             return false;
         }
         that.manager.bringToTop(that);
@@ -145,13 +151,24 @@ TouchImage.prototype.drag = function(){
             return false;
         }
         if(that.manager.drawing){
-            that.draw_points.push([event.gesture.x, event.gesture.y]);
-            console.log(that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY));
+            var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
+            that.draw_points.push([locals[0], locals[1], '']);
             return false;
         }
         that.pos.x = event.gesture.center.pageX - that.pos.dx;
         that.pos.y = event.gesture.center.pageY - that.pos.dy;
         that.updateTransform();
+    };
+};
+
+TouchImage.prototype.dragEnd = function(){
+    var that = this;
+    return function(event){
+        if(that.manager.drawing){
+            var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
+            that.draw_points.push([locals[0], locals[1], 'end']);
+            return false;
+        }
     };
 };
 
@@ -221,4 +238,23 @@ TouchImage.prototype.globalToLocal = function(gx, gy){
     var a = Math.atan2(y, x) + this.pos.ang;
     var r = Math.hypot(x, y);
     return [r*Math.cos(a), r*Math.sin(a)];
+}
+
+TouchImage.prototype.drawCanvas = function(){
+    this.ctx = this.canvas.getContext('2d');
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 5;
+    this.ctx.strokeStyle = 'rgb(50,50,200)';
+    var coord = this.draw_points[0];
+    this.ctx.moveTo(coord[0], -coord[1])
+    for(var i = 1; i < this.draw_points.length; i++){
+        var coord = this.draw_points[i];
+        if(coord[2] == 'start'){
+            this.ctx.moveTo(coord[0], -coord[1]) 
+        } else {
+            this.ctx.lineTo(coord[0], -coord[1])
+        }
+    }
+    this.ctx.stroke();
 }

@@ -24,6 +24,7 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     this.canvas = document.createElement('canvas');
     //TODO Use div instead of el maybe?
     this.el.appendChild(this.canvas);
+    this.lastDrawnTo = 0;
     
     //Set up the transform based on initial values
     this.transform = {a:1, 
@@ -153,6 +154,7 @@ TouchImage.prototype.drag = function(){
         if(that.manager.drawing){
             var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
             that.draw_points.push([locals[0], locals[1], '']);
+            window.requestAnimationFrame(that.drawCanvasCallback());
             return false;
         }
         that.pos.x = event.gesture.center.pageX - that.pos.dx;
@@ -167,6 +169,7 @@ TouchImage.prototype.dragEnd = function(){
         if(that.manager.drawing){
             var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
             that.draw_points.push([locals[0], locals[1], 'end']);
+            window.requestAnimationFrame(that.drawCanvasCallback());
             return false;
         }
     };
@@ -258,3 +261,34 @@ TouchImage.prototype.drawCanvas = function(){
     }
     this.ctx.stroke();
 }
+
+TouchImage.prototype.drawCanvasFrom = function(from){
+    if(from >= this.draw_points.length){
+        return;   
+    }
+    this.ctx = this.canvas.getContext('2d');
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 5;
+    this.ctx.strokeStyle = 'rgb(50,50,200)';
+    var coord = this.draw_points[from];
+    this.ctx.moveTo(coord[0], -coord[1])
+    for(var i = from + 1; i < this.draw_points.length; i++){
+        var coord = this.draw_points[i];
+        if(coord[2] == 'start'){
+            this.ctx.moveTo(coord[0], -coord[1]) 
+        } else {
+            this.ctx.lineTo(coord[0], -coord[1])
+        }
+    }
+    this.ctx.stroke();
+    this.lastDrawnTo = i - 1;
+    return i - 1;
+}
+
+TouchImage.prototype.drawCanvasCallback = function(){
+    var that = this;
+    return function(){
+        console.log("Canvas Callback", that.lastDrawnTo, that.draw_points.length);
+        that.drawCanvasFrom(that.lastDrawnTo);   
+    }
+};

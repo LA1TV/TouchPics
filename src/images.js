@@ -19,7 +19,11 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     //cubic-bezier(0.175, 0.885, 0.32, 1.275)
     this.el.appendChild(this.lock_button.div);
     
+    //TODO Local draw coords
     this.draw_points = [];
+    this.canvas = document.createElement('canvas');
+    //TODO Use div instead of el maybe?
+    this.el.appendChild(this.canvas);
     
     //Set up the transform based on initial values
     this.transform = {a:1, 
@@ -72,6 +76,9 @@ TouchImage.prototype.setScaleLimit = function(){
         */
         that.pos.scaleLimit = Math.max(200 / that.img.naturalWidth, 100 / that.img.naturalHeight);
         that.updateTransform();
+        that.canvas.width = that.img.width;
+        that.canvas.height = that.img.height;
+        that.canvas.style.marginTop = -that.img.height;
     };
 };
 
@@ -79,8 +86,9 @@ TouchImage.prototype.setZBase = function(z){
     this.z = z;  
     this.el.style.zIndex = z;
     this.img.style.zIndex = z + 1;
-    this.close_button.setZ(z+2);
-    this.lock_button.setZ(z+2);
+    this.canvas.style.zIndex = z+2;
+    this.close_button.setZ(z+3);
+    this.lock_button.setZ(z+3);
 };
 
 TouchImage.prototype.twiddleZ = function(){

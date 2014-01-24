@@ -22,7 +22,7 @@ DrawingMenu = function(width, height, manager){
     this.hammer.close = this.swipe_hammertime.on('swipeleft', this.hideMenu());
     this.hammer.open = this.swipe_hammertime.on('swiperight', this.showMenu());
     
-    this.addButton("assets/draw.svg", 0, 0, manager.toggleDraw());
+    this.addAnimButton("assets/draw_inv.svg", "assets/draw.svg", ['opacity', '1', '0', 'opacity 1s linear'], 0, 0, manager.toggleDraw());
 };
 
 DrawingMenu.prototype.hideMenu = function(){
@@ -43,5 +43,10 @@ DrawingMenu.prototype.showMenu = function(){
 
 DrawingMenu.prototype.addButton = function(src, top, right, func){
     button = new TouchButton(src, top, right, func);
+    this.div.appendChild(button.div);
+}
+
+DrawingMenu.prototype.addAnimButton = function(src1, src2, anim, top, right, func){
+    button = new AnimTouchButton(src1, src2, anim, top, right, func);
     this.div.appendChild(button.div);
 }

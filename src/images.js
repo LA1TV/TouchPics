@@ -2,22 +2,29 @@ Math.hypot = function(x, y){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
 };
 
-TouchImage = function(el, img, x, y, scale, ang, manager){
+TouchImage = function(div, img, x, y, scale, ang, manager){
     this.manager = manager;
     
-    this.el = el;
+    this.div = div;
     
     this.img = img;
     this.img.className = 'touchable';
-    this.el.appendChild(this.img);
+    this.div.appendChild(this.img);
     
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
-    this.el.appendChild(this.close_button.div);
+    this.div.appendChild(this.close_button.div);
     
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
                                           ['top', 0, 7, 'top 0.5s cubic-bezier(0.175, 0.885, 0.7, 1.775)'], 120, -20, this.toggleLock())
     //cubic-bezier(0.175, 0.885, 0.32, 1.275)
-    this.el.appendChild(this.lock_button.div);
+    this.div.appendChild(this.lock_button.div);
+    
+    //TODO Normalised draw coords
+    this.draw_points = [];
+    this.canvas = document.createElement('canvas');
+    this.canvas.className = 'touchableCanvas';
+    this.div.appendChild(this.canvas);
+    this.lastDrawnTo = 0;
     
     //Set up the transform based on initial values
     this.transform = {a:1, 
@@ -52,10 +59,11 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     };  
     
     //Set up all the Hammer stuff and register against hammer events
-    this.hammertime = Hammer(this.el, hammer_config);
+    this.hammertime = Hammer(this.div, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
+    this.hammer.dragend = this.hammertime.on('dragend', this.dragEnd());
     this.hammer.transformstart = this.hammertime.on('transformstart', this.transformStart());
     this.hammer.transform = this.hammertime.on('transform', this.transformCallback());
     this.hammer.tap = this.hammertime.on('tap', this.tap());
@@ -70,15 +78,18 @@ TouchImage.prototype.setScaleLimit = function(){
         */
         that.pos.scaleLimit = Math.max(200 / that.img.naturalWidth, 100 / that.img.naturalHeight);
         that.updateTransform();
+        that.canvas.width = that.img.width;
+        that.canvas.height = that.img.height;
     };
 };
 
 TouchImage.prototype.setZBase = function(z){
     this.z = z;  
-    this.el.style.zIndex = z;
+    this.div.style.zIndex = z;
     this.img.style.zIndex = z + 1;
-    this.close_button.setZ(z+2);
-    this.lock_button.setZ(z+2);
+    this.canvas.style.zIndex = z+2;
+    this.close_button.setZ(z+3);
+    this.lock_button.setZ(z+3);
 };
 
 TouchImage.prototype.twiddleZ = function(){
@@ -109,7 +120,7 @@ TouchImage.prototype.updateTransform = function(){
         this.transform.d+","+
         this.transform.e+","+
         this.transform.f+")";
-    this.el.style.webkitTransform = this.transform_matrix;
+    this.div.style.webkitTransform = this.transform_matrix;
 };
 
 TouchImage.prototype.dragStart = function(){
@@ -117,6 +128,12 @@ TouchImage.prototype.dragStart = function(){
     return function(event){
         console.log("DragSTart", event.gesture);
         if(that.pos.lock){
+            return false;
+        }
+        if(that.manager.drawing){
+            var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
+            var normLocals = that.normaliseLocals(locals);
+            that.draw_points.push([normLocals[0], normLocals[1], 'start']);
             return false;
         }
         that.manager.bringToTop(that);
@@ -134,9 +151,29 @@ TouchImage.prototype.drag = function(){
         if(that.pos.lock){
             return false;
         }
+        if(that.manager.drawing){
+            var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
+            var normLocals = that.normaliseLocals(locals);
+            that.draw_points.push([normLocals[0], normLocals[1], '']);
+            window.requestAnimationFrame(that.drawCanvasCallback());
+            return false;
+        }
         that.pos.x = event.gesture.center.pageX - that.pos.dx;
         that.pos.y = event.gesture.center.pageY - that.pos.dy;
         that.updateTransform();
+    };
+};
+//TODO One function for localising & normalising?
+TouchImage.prototype.dragEnd = function(){
+    var that = this;
+    return function(event){
+        if(that.manager.drawing){
+            var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
+            var normLocals = that.normaliseLocals(locals);
+            that.draw_points.push([normLocals[0], normLocals[1], 'end']);
+            window.requestAnimationFrame(that.drawCanvasCallback());
+            return false;
+        }
     };
 };
 
@@ -151,7 +188,7 @@ TouchImage.prototype.transformStart = function(){
     var that = this;
     return function(event){
         console.log("TransformStart", event);
-        if(that.pos.lock){
+        if(that.pos.lock || that.manager.drawing){
             return false;
         }
         that.manager.bringToTop(that);
@@ -172,7 +209,7 @@ TouchImage.prototype.transformCallback = function(){
     var that = this;
     return function(event){
         //console.log("Transform", event.gesture);
-        if(that.pos.lock){
+        if(that.pos.lock || that.manager.drawing){
             return false;
         }
         that.pos.scale = Math.max(that.pos.startScale * event.gesture.scale, that.pos.scaleLimit);
@@ -196,5 +233,98 @@ TouchImage.prototype.toggleLock = function(){
     var that = this;
     return function(event){
         that.pos.lock = !that.pos.lock;
+    }
+};
+
+TouchImage.prototype.globalToLocal = function(gx, gy){
+    var x = gx - this.pos.x;
+    //Make it be negative if a point is below our 'origin'
+    var y = this.pos.y - gy;
+    var a = Math.atan2(y, x) + this.pos.ang;
+    var r = Math.hypot(x, y);
+    return [r*Math.cos(a), r*Math.sin(a)];
+}
+
+TouchImage.prototype.normaliseLocals = function(coords){
+    var x = coords[0];
+    var y = coords[1];
+    var nx = x / this.img.width;
+    var ny = y / this.img.height;
+    return [nx, ny];
+}
+
+TouchImage.prototype.drawCanvas = function(){
+    this.ctx = this.canvas.getContext('2d');
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 5 * this.pos.scale;
+    this.ctx.strokeStyle = 'rgb(50,50,200)';
+    this.ctx.lineCap = 'round';
+    var point = this.draw_points[0];
+    var coord = [];
+    coord.push(point[0] * this.img.width);
+    coord.push(point[1] * this.img.height);
+    for(var j = 2; j < point.length; j++){
+        coord.push(point[j]);   
+    }
+    this.ctx.moveTo(coord[0], -coord[1])
+    for(var i = 1; i < this.draw_points.length; i++){
+        var point = this.draw_points[i];
+        var coord = [];
+        coord.push(point[0] * this.img.width);
+        coord.push(point[1] * this.img.height);
+        for(var j = 2; j < point.length; j++){
+            coord.push(point[j]);   
+        }
+        if(coord[2] == 'start'){
+            this.ctx.moveTo(coord[0], -coord[1]) 
+        } else {
+            this.ctx.lineTo(coord[0], -coord[1])
+        }
+    }
+    this.ctx.stroke();
+}
+
+TouchImage.prototype.drawCanvasFrom = function(from){
+    if(from >= this.draw_points.length){
+        return;   
+    }
+    this.ctx = this.canvas.getContext('2d');
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 5 * this.pos.scale;
+    this.ctx.strokeStyle = 'rgb(50,50,200)';
+    this.ctx.lineCap = 'round';
+    var point = this.draw_points[from];
+    var coord = [];
+    coord.push(point[0] * this.img.width);
+    coord.push(point[1] * this.img.height);
+    for(var j = 2; j < point.length; j++){
+        coord.push(point[j]);   
+    }
+    this.ctx.moveTo(coord[0], -coord[1])
+    console.log(coord);
+    for(var i = from + 1; i < this.draw_points.length; i++){
+        var point = this.draw_points[i];
+        var coord = [];
+        coord.push(point[0] * this.img.width);
+        coord.push(point[1] * this.img.height);
+        for(var j = 2; j < point.length; j++){
+            coord.push(point[j]);   
+        }
+        if(coord[2] == 'start'){
+            this.ctx.moveTo(coord[0], -coord[1]) 
+        } else {
+            this.ctx.lineTo(coord[0], -coord[1])
+        }
+    }
+    this.ctx.stroke();
+    this.lastDrawnTo = i - 1;
+    return i - 1;
+}
+
+TouchImage.prototype.drawCanvasCallback = function(){
+    var that = this;
+    return function(){
+        that.drawCanvasFrom(that.lastDrawnTo);   
     }
 };

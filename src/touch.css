@@ -27,6 +27,12 @@ div.touchable{
     z-index: 5;
 }
 
+canvas.touchableCanvas{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 img.button{
     width: 50px;
     height: 50px;
@@ -95,4 +101,23 @@ img.menu_button{
     bottom: 0;
     -webkit-transition-property: bottom;
     -webkit-transition-duration: 250ms;
+}
+
+div.drawing_menu{
+    position: relative;
+    top: 25px;
+    left: 0px;
+    border: 0px solid;
+    border-radius: 0 40px 40px 0;
+    background-color: rgb(150,0,0);
+    -webkit-transition-property: left;
+    -webkit-transition-duration: 1s;
+    padding: 10px;
+}
+
+div.drawing_menu_swipe_area{
+    position: fixed;
+    left: 0;
+    top: 0;
+    outline: solid 1px black;
 }

@@ -1,4 +1,3 @@
-//TODO z-indexing
 var zLayerDepth = 10;
 
 TouchImageManager = function(root){
@@ -6,6 +5,7 @@ TouchImageManager = function(root){
     this.imageRoot = root;
     window.addEventListener('resize', this.windowResize());
     this.windowHeight = window.innerHeight;
+    this.drawing = false;
 };
 
 TouchImageManager.prototype.setMenuInfo = function(height){
@@ -32,9 +32,6 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
     var div = document.createElement('div');
     div.className = 'touchable';
     this.imageRoot.appendChild(div);
-    //FIXME Images don't always appear until clicked, some don't redraw correctly over other elements
-    //TODO Try making an img from scratch
-    //TODO Try adding z-indexes
     var touchImg = new TouchImage(div, img.cloneNode(true), roughX, roughY, imgScale, roughA, this)
     touchImg.setZBase(this.images.length * zLayerDepth);
     this.images.push(touchImg);
@@ -42,7 +39,7 @@ TouchImageManager.prototype.newImage = function(img, x, y, scale){
 };
 
 TouchImageManager.prototype.removeImage = function(touchimg){
-    this.imageRoot.removeChild(touchimg.el);
+    this.imageRoot.removeChild(touchimg.div);
     this.images = this.images.filter(function(e){return e != touchimg});
 };
 
@@ -53,3 +50,10 @@ TouchImageManager.prototype.bringToTop = function(touchimg){
         this.images[i].setZBase(i * zLayerDepth);  
     };
 }
+
+TouchImageManager.prototype.toggleDraw = function(){
+    var that = this;
+    return function(){
+        that.drawing = !that.drawing;  
+    };
+};

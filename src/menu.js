@@ -65,7 +65,7 @@ Menu.prototype.updateContainerWidth = function(){
         };
         
         that.buttons_div.style.width = that.containerWidth;;
-        //TODO Check if repositioning is needed
+        //TODO Check if repositioning is needed (Not sure what I meant here, I was possibly thinking of the situation if images are removed from the menu)
     };
 };
 
@@ -81,8 +81,11 @@ Menu.prototype.containerDragStart = function(){
 Menu.prototype.containerDrag = function(){
     var that = this;   
     return function(event){
+        if(that.manager.drawing){
+            return false;   
+        }
         that.pos = that.startPos + event.gesture.center.pageX - that.startX;
-//        var maxPos = 0 //TODO Fix this for containerWidth < width
+//        var maxPos = 0 //FIXME Fix this for containerWidth < width
 //        var minPos = that.width - that.containerWidth;
 //        that.pos = Math.min(that.pos, maxPos);
 //        that.pos = Math.max(that.pos, minPos);
@@ -105,6 +108,9 @@ Menu.prototype.containerDragEnd = function(){
 Menu.prototype.containerSwipe = function(){
     var that = this;
     return function(event){
+        if(that.manager.drawing){
+            return false;   
+        }
         var modifier = 0
         //lolswitch
         if(event.gesture.direction == "right"){
@@ -120,7 +126,7 @@ Menu.prototype.containerSwipe = function(){
 };
 
 Menu.prototype.upperBound = function(){
-    return 0; //TODO Fix this for containerWidth < width
+    return 0; //FIXME Fix this for containerWidth < width
 };  
 
 Menu.prototype.lowerBound = function(){
@@ -143,8 +149,8 @@ Menu.prototype.setContainerScrollVelocity = function(v){
 Menu.prototype.update = function(){
     var that = this;
     return function(e){
-        //TODO Limit this
-        //TODO Sproinging at limits
+        //FIXME Limit this
+        //TODO Better sprining and physics on the sliding
         if(that.velocity != 0){
             that.pos += that.velocity * 1000 * that.updateInterval/1000;
             that.buttons_div.style.left = that.pos;

@@ -259,6 +259,7 @@ TouchImage.prototype.drawCanvas = function(){
     this.ctx.beginPath();
     this.ctx.lineWidth = 5 * this.pos.scale;
     this.ctx.strokeStyle = 'rgb(50,50,200)';
+    this.ctx.lineCap = 'round';
     var point = this.draw_points[0];
     var coord = [];
     coord.push(point[0] * this.img.width);
@@ -292,6 +293,7 @@ TouchImage.prototype.drawCanvasFrom = function(from){
     this.ctx.beginPath();
     this.ctx.lineWidth = 5 * this.pos.scale;
     this.ctx.strokeStyle = 'rgb(50,50,200)';
+    this.ctx.lineCap = 'round';
     var point = this.draw_points[from];
     var coord = [];
     coord.push(point[0] * this.img.width);

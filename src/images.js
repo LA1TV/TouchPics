@@ -132,7 +132,8 @@ TouchImage.prototype.dragStart = function(){
         }
         if(that.manager.drawing){
             var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
-            that.draw_points.push([locals[0], locals[1], 'start']);
+            var normLocals = that.normaliseLocals(locals);
+            that.draw_points.push([normLocals[0], normLocals[1], 'start']);
             return false;
         }
         that.manager.bringToTop(that);
@@ -152,7 +153,8 @@ TouchImage.prototype.drag = function(){
         }
         if(that.manager.drawing){
             var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
-            that.draw_points.push([locals[0], locals[1], '']);
+            var normLocals = that.normaliseLocals(locals);
+            that.draw_points.push([normLocals[0], normLocals[1], '']);
             window.requestAnimationFrame(that.drawCanvasCallback());
             return false;
         }
@@ -161,13 +163,14 @@ TouchImage.prototype.drag = function(){
         that.updateTransform();
     };
 };
-
+//TODO One function for localising & normalising?
 TouchImage.prototype.dragEnd = function(){
     var that = this;
     return function(event){
         if(that.manager.drawing){
             var locals = that.globalToLocal(event.gesture.center.pageX, event.gesture.center.pageY);
-            that.draw_points.push([locals[0], locals[1], 'end']);
+            var normLocals = that.normaliseLocals(locals);
+            that.draw_points.push([normLocals[0], normLocals[1], 'end']);
             window.requestAnimationFrame(that.drawCanvasCallback());
             return false;
         }
@@ -242,16 +245,36 @@ TouchImage.prototype.globalToLocal = function(gx, gy){
     return [r*Math.cos(a), r*Math.sin(a)];
 }
 
+TouchImage.prototype.normaliseLocals = function(coords){
+    var x = coords[0];
+    var y = coords[1];
+    var nx = x / this.img.width;
+    var ny = y / this.img.height;
+    return [nx, ny];
+}
+
 TouchImage.prototype.drawCanvas = function(){
     this.ctx = this.canvas.getContext('2d');
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.beginPath();
-    this.ctx.lineWidth = 5;
+    this.ctx.lineWidth = 5 * this.pos.scale;
     this.ctx.strokeStyle = 'rgb(50,50,200)';
-    var coord = this.draw_points[0];
+    var point = this.draw_points[0];
+    var coord = [];
+    coord.push(point[0] * this.img.width);
+    coord.push(point[1] * this.img.height);
+    for(var j = 2; j < point.length; j++){
+        coord.push(point[j]);   
+    }
     this.ctx.moveTo(coord[0], -coord[1])
     for(var i = 1; i < this.draw_points.length; i++){
-        var coord = this.draw_points[i];
+        var point = this.draw_points[i];
+        var coord = [];
+        coord.push(point[0] * this.img.width);
+        coord.push(point[1] * this.img.height);
+        for(var j = 2; j < point.length; j++){
+            coord.push(point[j]);   
+        }
         if(coord[2] == 'start'){
             this.ctx.moveTo(coord[0], -coord[1]) 
         } else {
@@ -267,12 +290,25 @@ TouchImage.prototype.drawCanvasFrom = function(from){
     }
     this.ctx = this.canvas.getContext('2d');
     this.ctx.beginPath();
-    this.ctx.lineWidth = 5;
+    this.ctx.lineWidth = 5 * this.pos.scale;
     this.ctx.strokeStyle = 'rgb(50,50,200)';
-    var coord = this.draw_points[from];
+    var point = this.draw_points[from];
+    var coord = [];
+    coord.push(point[0] * this.img.width);
+    coord.push(point[1] * this.img.height);
+    for(var j = 2; j < point.length; j++){
+        coord.push(point[j]);   
+    }
     this.ctx.moveTo(coord[0], -coord[1])
+    console.log(coord);
     for(var i = from + 1; i < this.draw_points.length; i++){
-        var coord = this.draw_points[i];
+        var point = this.draw_points[i];
+        var coord = [];
+        coord.push(point[0] * this.img.width);
+        coord.push(point[1] * this.img.height);
+        for(var j = 2; j < point.length; j++){
+            coord.push(point[j]);   
+        }
         if(coord[2] == 'start'){
             this.ctx.moveTo(coord[0], -coord[1]) 
         } else {

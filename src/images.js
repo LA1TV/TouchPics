@@ -23,6 +23,7 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     this.draw_points = [];
     this.canvas = document.createElement('canvas');
     //TODO Use div instead of el maybe?
+    this.canvas.className = 'touchableCanvas';
     this.el.appendChild(this.canvas);
     this.lastDrawnTo = 0;
     
@@ -80,7 +81,6 @@ TouchImage.prototype.setScaleLimit = function(){
         that.updateTransform();
         that.canvas.width = that.img.width;
         that.canvas.height = that.img.height;
-        that.canvas.style.marginTop = -that.img.height;
     };
 };
 

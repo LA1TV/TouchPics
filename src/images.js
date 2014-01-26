@@ -2,29 +2,28 @@ Math.hypot = function(x, y){
     return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));  
 };
 
-TouchImage = function(el, img, x, y, scale, ang, manager){
+TouchImage = function(div, img, x, y, scale, ang, manager){
     this.manager = manager;
     
-    this.el = el;
+    this.div = div;
     
     this.img = img;
     this.img.className = 'touchable';
-    this.el.appendChild(this.img);
+    this.div.appendChild(this.img);
     
     this.close_button = new TouchButton("assets/close.svg", 60, -20, this.tapButton());
-    this.el.appendChild(this.close_button.div);
+    this.div.appendChild(this.close_button.div);
     
     this.lock_button = new AnimTouchButton("assets/lock_base.svg", "assets/lock_hook.svg",
                                           ['top', 0, 7, 'top 0.5s cubic-bezier(0.175, 0.885, 0.7, 1.775)'], 120, -20, this.toggleLock())
     //cubic-bezier(0.175, 0.885, 0.32, 1.275)
-    this.el.appendChild(this.lock_button.div);
+    this.div.appendChild(this.lock_button.div);
     
-    //TODO Local draw coords
+    //TODO Normalised draw coords
     this.draw_points = [];
     this.canvas = document.createElement('canvas');
-    //TODO Use div instead of el maybe?
     this.canvas.className = 'touchableCanvas';
-    this.el.appendChild(this.canvas);
+    this.div.appendChild(this.canvas);
     this.lastDrawnTo = 0;
     
     //Set up the transform based on initial values
@@ -60,7 +59,7 @@ TouchImage = function(el, img, x, y, scale, ang, manager){
     };  
     
     //Set up all the Hammer stuff and register against hammer events
-    this.hammertime = Hammer(this.el, hammer_config);
+    this.hammertime = Hammer(this.div, hammer_config);
     this.hammer = {};
     this.hammer.dragstart = this.hammertime.on('dragstart', this.dragStart());
     this.hammer.drag = this.hammertime.on('drag', this.drag());
@@ -86,7 +85,7 @@ TouchImage.prototype.setScaleLimit = function(){
 
 TouchImage.prototype.setZBase = function(z){
     this.z = z;  
-    this.el.style.zIndex = z;
+    this.div.style.zIndex = z;
     this.img.style.zIndex = z + 1;
     this.canvas.style.zIndex = z+2;
     this.close_button.setZ(z+3);
@@ -121,7 +120,7 @@ TouchImage.prototype.updateTransform = function(){
         this.transform.d+","+
         this.transform.e+","+
         this.transform.f+")";
-    this.el.style.webkitTransform = this.transform_matrix;
+    this.div.style.webkitTransform = this.transform_matrix;
 };
 
 TouchImage.prototype.dragStart = function(){
@@ -288,7 +287,6 @@ TouchImage.prototype.drawCanvasFrom = function(from){
 TouchImage.prototype.drawCanvasCallback = function(){
     var that = this;
     return function(){
-        console.log("Canvas Callback", that.lastDrawnTo, that.draw_points.length);
         that.drawCanvasFrom(that.lastDrawnTo);   
     }
 };

@@ -77,9 +77,11 @@ TouchImage.prototype.setScaleLimit = function(){
         //inequalities hold
         */
         that.pos.scaleLimit = Math.max(200 / that.img.naturalWidth, 100 / that.img.naturalHeight);
-        that.updateTransform();
+        that.nwidth = that.img.naturalWidth;
+        that.nheight = that.img.naturalHeight;
         that.canvas.width = that.img.width;
         that.canvas.height = that.img.height;
+        that.updateTransform();
     };
 };
 
@@ -104,7 +106,10 @@ TouchImage.prototype.twiddleZ = function(){
 TouchImage.prototype.updateTransform = function(){
     //This scales the image by setting its width, making sure its not scaled lower 
     //than the scale limit
-    this.img.width = this.pos.scale * this.img.naturalWidth;
+    this.img.width = this.pos.scale * this.nwidth;
+    this.img.height = this.pos.scale * this.nheight;
+    this.div.style.width = this.pos.scale * this.nwidth;
+    this.div.style.height = this.pos.scale * this.nheight;
 
     //We then populate the string with the matrix values and set it
     this.transform.a = Math.cos(this.pos.ang);

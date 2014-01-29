@@ -1,11 +1,10 @@
-Menu = function(width, height, bottom, manager){
+Menu = function(width, height, manager){
     this.width = width;
     this.height = height;
-    this.bottom = bottom;
     this.manager = manager;
     this.buttons = {};
     
-    this.manager.setMenuInfo(this.height + this.bottom)
+    this.manager.setMenuInfo(this.height - 50);
     
     this.div = document.createElement('div');
     this.div.className = 'menu';
@@ -15,8 +14,7 @@ Menu = function(width, height, bottom, manager){
     this.container = document.createElement('div');
     this.container.className = 'menu_container';
     this.container.style.width = '100%';
-    this.container.style.marginBottom = this.bottom;
-    this.container.style.marginTop = 0;
+    this.container.style.bottom = -50;
     this.container.appendChild(this.div);
     
     this.buttons_div = document.createElement('div');
@@ -176,17 +174,15 @@ Menu.prototype.update = function(){
 Menu.prototype.hideMenu = function(){
     var that = this;
     return function(event){
-        that.bottom = -200
-        that.container.style.marginBottom = that.bottom;
-        that.container.style.marginTop = 50 + 200;
+        that.bottom = -300;
+        that.container.style.bottom = that.bottom;
     };
 };
 
 Menu.prototype.showMenu = function(){
     var that = this;
     return function(event){
-        that.bottom = 50;
-        that.container.style.marginBottom = that.bottom;
-        that.container.style.marginTop = 0;
+        that.bottom = -50;
+        that.container.style.bottom = that.bottom;
     };
 };
